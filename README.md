@@ -2,6 +2,8 @@
 
 ## Project setup
 ```
+git clone https://github.com/sanjay-shah/aqua-dash.git
+cd aqua-dash
 npm install
 ```
 
