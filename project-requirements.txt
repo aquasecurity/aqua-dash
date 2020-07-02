@@ -1,0 +1,17 @@
+Additional pieces to add to the project:
+
+Database to the environment
+For Outstanding vulnerabilities and time to fix the issues
+Trend of Risks over time.
+Add more data points for the Vulnerabilities 
+Critical and Highs separated out of the total number
+Add a widget for:
+Select Project (Workspace – Namespace) 
+Select Repository – All images within a repository
+Select an Image out of the full list to see each Vulnerability attached to an image
+Documentation for the project 
+
+
+Thanks
+
+Derek

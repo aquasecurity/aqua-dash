@@ -1,28 +1,32 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app :dark="true">
+
+    <TopToolbar></TopToolbar>
+    <v-content>
+      <router-view></router-view>
+    </v-content>
+    <!--BottomNav></BottomNav-->
+
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TopToolbar from './components/TopToolbar.vue';
 
 export default {
-  name: 'App',
+  data () {
+      return {
+          message: 'Welcome to the Aqua dash'
+      }
+  },
   components: {
-    HelloWorld
+      'TopToolbar': TopToolbar
+  },
+  methods: {
+    
+  },
+  async created() {
+    
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
