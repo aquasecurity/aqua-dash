@@ -1,10 +1,10 @@
 <template>
-  <v-app :dark="true">
+  <v-app>
 
     <TopToolbar></TopToolbar>
-    <v-content>
+    <v-main>
       <router-view></router-view>
-    </v-content>
+    </v-main>
     <!--BottomNav></BottomNav-->
 
   </v-app>

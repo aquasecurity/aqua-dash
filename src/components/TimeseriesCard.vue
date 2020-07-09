@@ -8,13 +8,18 @@
     >
       <v-card-title>
         <span class="title font-weight-light ">
-        Risks: {{imageName}}
+        Risk Trends 
+        </span>
+        <v-spacer/>
+        <span class="title font-weight-thin ">
+        {{imageName}}
         </span>
       </v-card-title>
       <div class="container">
         <div class="Chart__content">
           <line-chart
             :timeseriesData="timeseriesData"
+            :height="250"
           ></line-chart>
         </div>
       </div>

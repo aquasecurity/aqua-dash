@@ -8,7 +8,7 @@
     <v-row no-gutters>
     <v-col 
       cols="12"
-      sm="3"
+      sm="2"
     >
       <v-row>
         <SelectCard 
@@ -18,33 +18,22 @@
     </v-col>
     <v-col 
       cols="12"
-      sm="9"
+      sm="10"
     >
       <v-row xs12>
         <VulnCard 
           class="item" 
-          :statsType="vulnerabilities"
-          :stats="vulnCount"
         > </VulnCard>
       </v-row>
       <v-row xs12>
         <v-col cols="12" sm="2" justify-left>
           <v-row>
-        <!--Average/Outstanding/Resolution
-        (critaicl_vuln_date_reported - Today) == so many days to fix-->
-        <StatsCard 
-          class="item" 
-          :statsType="outstanding"
-          :stats="stats"
-        > </StatsCard>
-      </v-row>
-      <v-row>
-        <StatsCard 
-          class="item" 
-          :statsType="resolve"
-          :stats="stats"
-        > </StatsCard>
-      </v-row>
+            <AttentionCard 
+              class="item" 
+              :statsType="outstanding"
+              :stats="stats"
+            > </AttentionCard>
+          </v-row>
         </v-col>
         <v-col cols="12" sm="10">
           <TimeseriesCard
@@ -57,15 +46,22 @@
       </v-row>
     </v-col>
   </v-row>
+  <v-row>
+    <v-col cols="12" sm="12">
+      <RiskCard/>
+    </v-col>
+  </v-row>
   </v-container>
 </template>
 
 <script>
 import {mapActions} from 'vuex'
-import StatsCard from '../components/StatsCard.vue'
+//import StatsCard from '../components/StatsCard.vue'
 import SelectCard from '../components/SelectCard.vue'
 import VulnCard from '../components/VulnCard.vue'
 import TimeseriesCard from '../components/TimeseriesCard.vue'
+import AttentionCard from '../components/AttentionCard.vue'
+import RiskCard from '../components/RiskCard.vue'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 
@@ -83,10 +79,12 @@ export default {
     fullPage: true
   }),
   components: {
-    StatsCard,
+    //StatsCard,
     SelectCard,
     VulnCard,
     TimeseriesCard,
+    AttentionCard,
+    RiskCard,
     Loading
   },
   computed: {
@@ -120,8 +118,8 @@ export default {
       await this.fetchNamespaces()
       await this.fetchRegistries()
       await this.fetchImages('All Registries')
-      await this.fetchVulnAck()
-      await this.fetchTimeseriesData()
+      this.fetchVulnAck()
+      this.fetchTimeseriesData()
       this.isLoading = false
     } catch (err) {
       console.log(err)
@@ -145,12 +143,9 @@ export default {
     pollData () {
       this.polling = setInterval(() => {
         console.log('Dashboard polling...')
-        this.fetchVuln()
+        //this.fetchVuln()
         this.fetchVulnAck()
-      }, 30000)
-    },
-    getVulnerabilities() {
-      this.getVuln()
+      }, 60000)
     }
    }
 }

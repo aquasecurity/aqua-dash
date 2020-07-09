@@ -25,8 +25,8 @@ export default new Vuex.Store({
   state: {
     namespaces: [],
     registries: [],
+    imagesText: [],
     images: [],
-    vulns: [],
     vulnCount: 0,
     accessToken: "",
     vulnAck: [],
@@ -38,8 +38,10 @@ export default new Vuex.Store({
     imageSelected: null,
     repoSelected: null,
     timeseriesData: null,
-    from: '2020-06-30T20:40',
-    to: '2020-07-02T23:59',
+    from: moment().subtract(1, 'months'),
+    to: moment(),
+    risks: [],
+    riskTableLoading: false
   },
   getters: {
     namespaces (state) {
@@ -48,11 +50,11 @@ export default new Vuex.Store({
     registries (state) {
       return state.registries
     },
+    imagesText (state) {
+      return state.imagesText
+    },
     images (state) {
       return state.images
-    },
-    vulns (state) {
-      return state.vulns
     },
     vulnCount (state) {
       return state.vulnCount
@@ -86,6 +88,12 @@ export default new Vuex.Store({
     },
     timeseriesData (state) {
       return state.timeseriesData
+    },
+    risks (state) {
+      return state.risks
+    },
+    riskTableLoading (state) {
+      return state.riskTableLoading
     }
   },
   mutations: {
@@ -99,14 +107,14 @@ export default new Vuex.Store({
         state.registries = registries
       }
     },
+    SET_IMAGES_TEXT (state, imagesText) {
+      if (imagesText) {
+        state.imagesText = imagesText
+      }
+    },
     SET_IMAGES (state, images) {
       if (images) {
         state.images = images
-      }
-    },
-    SET_VULNS (state, vulns) {
-      if (vulns) {
-        state.vulns = vulns
       }
     },
     SET_VULN_COUNT (state, vulnCount) {
@@ -152,6 +160,16 @@ export default new Vuex.Store({
       if (timeseriesData) {
         state.timeseriesData = timeseriesData
       }
+    },
+    SET_RISKS (state, risks) {
+      if (risks) {
+        state.risks = risks
+      }
+    },
+    SET_RISK_TABLE_LOADING (state, riskTableLoading) {
+      if (riskTableLoading) {
+        state.riskTableLoading = riskTableLoading
+      }
     }
   },
   actions: {
@@ -164,7 +182,6 @@ export default new Vuex.Store({
     },
     async fetchNamespaces ({commit, state}) {
       let tokenString = "Bearer " + state.accessToken
-      //console.log(tokenString)
       let response = await axios.get('http://localhost:9090/api/v1/orchestrator/namespaces/names?orderby=name%2Basc', 
         { headers: { Authorization: tokenString } 
       })
@@ -175,7 +192,6 @@ export default new Vuex.Store({
         names.push(response.data.result[i].name)
       }
       await commit('SET_NAMESPACES', names)
-      //console.log(result.data)
     },
     async fetchRegistries ({commit, state}) {
       let tokenString = "Bearer " + state.accessToken
@@ -202,7 +218,7 @@ export default new Vuex.Store({
       let response = await axios.get('http://localhost:9090/api/v2/images?registry=Host+Images&page=1&include_totals=true&order_by=name&page_size=1000', 
         { headers: { Authorization: tokenString } 
       })*/
-      repo = repo.replace(/ /g, '+');
+      repo = repo.replace(/ /g, '+')
       console.log('REPO: ')
       console.log(repo)
       let response = null
@@ -223,19 +239,100 @@ export default new Vuex.Store({
       for (var i = 0; response.data.result && i < response.data.result.length; i++) {
         names.push(response.data.result[i].name)
       }
-      await commit('SET_IMAGES', response.data.result ? names : [])
-      await commit('SET_VULNS', response.data.result ? response.data.result : [])
+      await commit('SET_IMAGES_TEXT', response.data.result ? names : [])
+      await commit('SET_IMAGES', response.data.result ? response.data.result : [])
       //console.log(result.data)
     },
-    async fetchVuln ({commit, state}) {
+    async fetchRisks ({commit, state}) {
+      //https://testdrive656.aquasec.com/api/v2/images/aquademo/malware-example/latest/malware
+      //https://testdrive656.aquasec.com/api/v2/images/aquademo/malware-example/latest/sensitive
+      await commit('SET_RISKS', [])
+      await commit('SET_RISK_TABLE_LOADING', true)
       let tokenString = "Bearer " + state.accessToken
-      //console.log(tokenString)
-      let result = await axios.get('http://localhost:9090/api/v1/dashboard?registry=&hosts=&containers_app=', 
-        { headers: { Authorization: tokenString } 
+      let vulnResponse = await axios.get('http://localhost:9090/api/v2/risks/vulnerabilities', 
+        { 
+          headers: { 
+            Authorization: tokenString 
+          },
+          params: {
+            include_vpatch_info: 'true',
+            page: 1,
+            pagesize: 1000,
+            skip_count: false,
+            hide_base_image: false,
+            image_name: state.imageSelected,
+            show_medium_to_critical: true,
+            order_by: '-aqua_severity'
+          }
       })
-      await commit('SET_VULN_COUNT', result.data.registry_counts.vulnerabilities.total)
-      console.log(result.data.registry_counts.vulnerabilities.total)
-      //console.log(result.data)
+      let riskArray = []
+      //response.data.result ? response.data.result : []
+      for (let i = 0; i < vulnResponse.data.result.length; i++) {
+        if (vulnResponse.data.result[i].aqua_severity !== 'medium') {
+          riskArray.push(vulnResponse.data.result[i])
+        }
+      }
+      
+      console.log('RISKS: ')
+      console.log(riskArray)
+      let cleansedImageName = state.imageSelected
+      cleansedImageName = cleansedImageName.replace(/:/g, '/')
+      let malwareResponse = await axios.get(`http://localhost:9090/api/v2/images/${state.repoSelected}/${cleansedImageName}/malware`, 
+      { 
+        headers: { 
+          Authorization: tokenString 
+        }
+      })
+      console.log('Malware:')
+      console.log(malwareResponse.data.result)
+      let sensitiveResponse = await axios.get(`http://localhost:9090/api/v2/images/${state.repoSelected}/${cleansedImageName}/sensitive`, 
+      { 
+        headers: { 
+          Authorization: tokenString 
+        }
+      })
+      console.log('Sensitive:')
+      console.log(sensitiveResponse.data.result)
+      let malwareObject = {
+        name: "Malware",
+        aqua_severity: "Malware",
+        solution: "Delete these files",
+        nvd_url: "https://malware.fix"
+      }
+      for (let i = 0; i < malwareResponse.data.result.length; i++) {
+          malwareObject.description 
+            = 'Malware: ' + malwareResponse.data.result[i].malware 
+            + ' Path: ' + malwareResponse.data.result[i].paths
+          riskArray.push(malwareObject)
+      }
+
+      let sensitiveObject = {
+        name: "Sensitive",
+        aqua_severity: "Sensitive",
+        solution: "Delete these files",
+        nvd_url: "https://sensitive.fix"
+      }
+      for (let j = 0; j < sensitiveResponse.data.result.length; j++) {
+          sensitiveObject.description 
+            = 'Type: ' + sensitiveResponse.data.result[j].type 
+            + ' Path: ' + sensitiveResponse.data.result[j].path
+          riskArray.push(sensitiveObject)
+          console.log('sensitiveObject')
+          console.log(sensitiveObject)
+      }
+      // add id to riskArray
+      console.log('Risk Array Length')
+      console.log(riskArray.length)
+      for (var i = 0; i < riskArray.length; i++) {
+        console.log(i)
+        riskArray[i].id = i
+      }
+      console.log('riskArray with malware')
+      console.log(riskArray)
+      await commit('SET_RISKS', riskArray)
+      await commit('SET_RISK_TABLE_LOADING', false)
+      
+      
     },
     async fetchVulnAck ({commit, state}) {
       /////////////////////////////////////

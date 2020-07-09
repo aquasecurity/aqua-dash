@@ -6,21 +6,30 @@
       class="rounded-card"
       height="auto"
     >
-      <v-card-title>
-        <span class="title font-weight-light ">
+      <v-card-title class="justify-center">
+        <span class="title font-weight-light">
         VULNERABILITIES
         </span>
       </v-card-title>
-      <!--div class="hidden-sm-and-down"-->
-      <div class="text-center">
         <v-chip
         class="ma-2"
-        color="error"
+        color="#8b0000"
         text-color="white"
         x-large
         label
         >
-          {{vuln.critical}}
+          <!--span class="title font-weight-light "-->
+            <h1>{{vuln.critical}}</h1>
+          <!--/span-->
+        </v-chip>
+        <v-chip
+        class="ma-2"
+        color="#d80000"
+        text-color="white"
+        x-large
+        label
+        >
+          <h1>{{vuln.high}}</h1>
         </v-chip>
         <v-chip
         class="ma-2"
@@ -29,18 +38,8 @@
         x-large
         label
         >
-          {{vuln.high}}
+          <h1>{{vuln.med}}</h1>
         </v-chip>
-        <v-chip
-        class="ma-2"
-        color="info"
-        text-color="white"
-        x-large
-        label
-        >
-          {{vuln.total}}
-        </v-chip>
-      </div>
     </v-card>
     <v-spacer/>
     <v-card
@@ -49,7 +48,7 @@
       class="rounded-card"
       height="auto"
     >
-      <v-card-title>
+      <v-card-title class="justify-center">
         <span class="title font-weight-light ">
         SENSITIVE DATA
         </span>
@@ -62,7 +61,7 @@
         x-large
         label
         >
-          {{vuln.sensitive}}
+          <h1>{{vuln.sensitive}}</h1>
         </v-chip>
       </div>
     </v-card>
@@ -73,7 +72,7 @@
       class="rounded-card"
       height="auto"
     >
-      <v-card-title>
+      <v-card-title class="justify-center">
         <span class="title font-weight-light ">
         MALWARE
         </span>
@@ -86,7 +85,7 @@
         x-large
         label
         >
-          {{vuln.malware}}
+          <h1>{{vuln.malware}}</h1>
         </v-chip>
       </div>
     </v-card>
@@ -98,7 +97,7 @@
       class="rounded-card"
       height="auto"
     >
-      <v-card-title>
+      <v-card-title class="justify-center">
         <span class="title font-weight-light ">
         UNACKNOWLEDGED
         </span>
@@ -106,12 +105,12 @@
       <div class="text-center">
         <v-chip
         class="ma-2"
-        color="error"
+        color="warning"
         text-color="white"
         x-large
         label
         >
-          {{vuln.unacknowledged}}
+          <h1>{{vuln.unacknowledged}}</h1>
         </v-chip>
       </div>
     </v-card>
@@ -122,7 +121,7 @@
       class="rounded-card"
       height="auto"
     >
-      <v-card-title>
+      <v-card-title class="justify-center">
         <span class="title font-weight-light ">
         ACKNOWLEDGED
         </span>
@@ -135,7 +134,7 @@
         x-large
         label
         >
-          {{vuln.acknowledged}}
+          <h1>{{vuln.acknowledged}}</h1>
         </v-chip>
       </div>
     </v-card>
@@ -149,16 +148,16 @@ export default {
     polling: null
   }),
   props: [
-    'statsType',
-    'stats'
+    
   ],
   computed: {
     vuln () {
-      let vulns = this.$store.getters.vulns
+      let vulns = this.$store.getters.images
       let imageSelected = this.$store.getters.imageSelected
       let vulnAck = this.$store.getters.vulnAck
       let crit_vulns = 0
       let high_vulns = 0
+      let med_vulns = 0
       let total_vulns = 0
       let sensitive_data = 0
       let malware = 0
@@ -168,6 +167,7 @@ export default {
         if (imageSelected && vulns[i].name === imageSelected) {
           crit_vulns = vulns[i].crit_vulns
           high_vulns = vulns[i].high_vulns
+          med_vulns = vulns[i].med_vulns
           total_vulns = vulns[i].vulns_found
           sensitive_data = vulns[i].sensitive_data
           malware = vulns[i].malware
@@ -180,6 +180,7 @@ export default {
         } 
         crit_vulns += vulns[i].crit_vulns
         high_vulns += vulns[i].high_vulns
+        med_vulns += vulns[i].med_vulns
         total_vulns += vulns[i].vulns_found
         sensitive_data += vulns[i].sensitive_data
         malware += vulns[i].malware
@@ -192,7 +193,7 @@ export default {
       return {
         critical: crit_vulns,
         high: high_vulns,
-        total: total_vulns,
+        med: med_vulns,
         sensitive: sensitive_data,
         malware: malware,
         acknowledged: acknowledged,

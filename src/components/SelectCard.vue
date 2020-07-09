@@ -62,7 +62,7 @@ export default {
       return this.$store.getters.registries
     },
     images () {
-      return this.$store.getters.images
+      return this.$store.getters.imagesText
     }
   },
   async mounted () {
@@ -77,12 +77,13 @@ export default {
       'fetchRegistries',
       'fetchImages',
       'fetchTimeseriesData',
+      'fetchRisks',
       'selectImage',
       'selectRepo'
     ]),
     pollData () {
       this.polling = setInterval(() => {
-        console.log('polling for *namespaces* from SelectCard')
+        console.log('polling for namespaces and registries...')
         this.fetchNamespaces()
         this.fetchRegistries()
       }, 60000)
@@ -90,10 +91,12 @@ export default {
     handleImageSelection() {
       this.selectImage(this.imageSelected)
       this.fetchTimeseriesData()
+      this.fetchRisks()
     },
     handleRepoSelection() {
       this.selectRepo(this.repoSelected)
       this.fetchImages(this.repoSelected)
+      this.fetchTimeseriesData()
     }
 
   }

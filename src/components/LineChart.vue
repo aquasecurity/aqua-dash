@@ -46,28 +46,28 @@ export default {
         datasets: [
           {
             label: 'critical',
-            borderColor: 'red',
-            pointBackgroundColor: 'white',
+            borderColor: '#8b0000',
+            pointBackgroundColor: '#8b0000',
             borderWidth: 1,
-            pointBorderColor: 'red',
+            pointBorderColor: '#8b0000',
             backgroundColor: 'transparent',
             data: this.chartData.critVuln
           },
           {
             label: 'high',
-            borderColor: 'orange',
-            pointBackgroundColor: 'white',
+            borderColor: '#d80000',
+            pointBackgroundColor: '#d80000',
             borderWidth: 1,
-            pointBorderColor: 'orange',
+            pointBorderColor: '#d80000',
             backgroundColor: 'transparent',
             data: this.chartData.highVuln
           },
           {
             label: 'medium',
-            borderColor: 'green',
-            pointBackgroundColor: 'white',
+            borderColor: 'orange',
+            pointBackgroundColor: 'orange',
             borderWidth: 1,
-            pointBorderColor: 'green',
+            pointBorderColor: 'orange',
             backgroundColor: 'transparent',
             data: this.chartData.medVuln
           }
