@@ -103,7 +103,9 @@ import moment from 'moment'
         console.log(ofWhat)
       },
       daysRemaining (date) {
-        let daysToFix = 30
+        console.log('high days')
+        console.log(this.$store.getters.highAge)
+        let daysToFix = this.$store.getters.highAge
         let orignDate = moment(date)
         var todayDate = moment(new Date)
         let diffDay = orignDate.diff(todayDate, 'days')

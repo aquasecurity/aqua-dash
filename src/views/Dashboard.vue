@@ -5,6 +5,14 @@
         :can-cancel="false"
         :is-full-page="fullPage"></loading>
     </div>
+    <v-alert
+      v-if="error"
+      dense
+      type="error"
+      dismissible
+    >
+      {{errorText}}
+    </v-alert>
     <v-row no-gutters>
     <v-col 
       cols="12"
@@ -76,7 +84,9 @@ export default {
     outstanding: "overdue",
     resolve: "resolved",
     isLoading: false,
-    fullPage: true
+    fullPage: true,
+    error: false,
+    errorText: null
   }),
   components: {
     //StatsCard,
@@ -114,6 +124,7 @@ export default {
     this.pollData()
     try {
       this.isLoading = true
+      //await this.initializeStore()
       await this.fetchAccessToken()
       await this.fetchNamespaces()
       await this.fetchRegistries()
@@ -123,15 +134,23 @@ export default {
       this.isLoading = false
     } catch (err) {
       console.log(err)
+      this.error = true
+      this.errorText = 
+        '[' + err.response.data.code + '] '
+        + err.response.data.message
     } finally {
       this.isLoading = false
     }
+  },
+  async created () {
+      //await this.initializeStore()
   },
   beforeDestroy () {
       clearInterval(this.polling)
   },
   methods: {
     ...mapActions([
+      'initializeStore',
       'fetchVuln', 
       'fetchAccessToken',
       'fetchVulnAck',

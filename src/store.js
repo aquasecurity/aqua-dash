@@ -2,10 +2,14 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
+
+/*
 const login = {
   id: 'administrator',
   password: 'NzgxYzll'
 }
+*/
+
 // Function to compute timestamp 
 // from mongodb's document _id 
 function getTimestamp (objectId) {
@@ -23,12 +27,19 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    initRequired: false,
+    aquaApi: null,
+    timeseriesApi: null,
+    userName: null,
+    password: null,
+    accessToken: null,
+    criticalAge: null,
+    highAge: null,
     namespaces: [],
     registries: [],
     imagesText: [],
     images: [],
     vulnCount: 0,
-    accessToken: "",
     vulnAck: [],
     vulnUnAck: 0,
     vulnCritical: 0,
@@ -44,6 +55,30 @@ export default new Vuex.Store({
     riskTableLoading: false
   },
   getters: {
+    initRequired (state) {
+      return state.initRequired
+    },
+    aquaApi (state) {
+      return state.aquaApi
+    },
+    timeseriesApi (state) {
+      return state.timeseriesApi
+    },
+    userName (state) {
+      return state.userName
+    },
+    password (state) {
+      return state.password
+    },
+    accessToken (state) {
+      return state.accessToken
+    },
+    criticalAge (state) {
+      return state.criticalAge
+    },
+    highAge (state) {
+      return state.highAge
+    },
     namespaces (state) {
       return state.namespaces
     },
@@ -58,9 +93,6 @@ export default new Vuex.Store({
     },
     vulnCount (state) {
       return state.vulnCount
-    },
-    accessToken (state) {
-      return state.accessToken
     },
     vulnAck (state) {
       return state.vulnAck
@@ -97,6 +129,59 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    INITIALIZE_STORE (state) {
+      state.aquaApi 
+        = localStorage.getItem('aquaApi')
+      state.timeseriesApi 
+        = localStorage.getItem('timeseriesApi')
+      state.userName 
+        = localStorage.getItem('userName')
+      state.password
+        = localStorage.getItem('password')
+      state.accessToken
+        = localStorage.getItem('accessToken')
+      state.criticalAge
+        = localStorage.getItem('criticalAge') || 7
+      state.highAge
+        = localStorage.getItem('highAge') || 30
+      
+      if (
+        !state.aquaApi || 
+        !state.timeseriesApi || 
+        !state.userName || 
+        !state.password
+      ) {
+        state.initRequired = true
+      }
+    },
+    SET_AQUA_API (state, aquaApi) {
+      state.aquaApi = aquaApi
+      localStorage.setItem('aquaApi', aquaApi)
+    },
+    SET_TIMESERIES_API (state, timeseriesApi) {
+      state.timeseriesApi = timeseriesApi
+      localStorage.setItem('timeseriesApi', timeseriesApi)
+    },
+    SET_USERNAME (state, userName) {
+      state.userName = userName
+      localStorage.setItem('userName', userName)
+    },
+    SET_PASSWORD (state, password) {
+      state.password = password
+      localStorage.setItem('password', password)
+    },
+    SET_ACCESS_TOKEN (state, accessToken) {
+      state.accessToken = accessToken
+      localStorage.setItem('accessToken', accessToken)
+    },
+    SET_CRITICAL_FIX (state, criticalAge) {
+      state.criticalAge = criticalAge
+      localStorage.setItem('criticalAge', criticalAge)
+    },
+    SET_HIGH_FIX (state, highAge) {
+      state.highAge = highAge
+      localStorage.setItem('highAge', highAge)
+    },
     SET_NAMESPACES (state, namespaces) {
       if (namespaces) {
         state.namespaces = namespaces
@@ -121,9 +206,6 @@ export default new Vuex.Store({
       if (vulnCount) {
         state.vulnCount = vulnCount
       }
-    },
-    SET_ACCESS_TOKEN (state, accessToken) {
-        state.accessToken = accessToken
     },
     SET_VULN_ACK (state, vulnAck) {
       if (vulnAck) {
@@ -173,16 +255,39 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async fetchAccessToken ({commit}) {
+    async initializeStore ({commit}) {
+      console.log('initializeStore called:::::' + localStorage.getItem('aquaApi'))
+
+      await commit('INITIALIZE_STORE')
+    },
+    async saveSettings ({commit}, settings) {
+      await commit('SET_AQUA_API', settings.aquaApi)
+      await commit('SET_TIMESERIES_API', settings.timeseriesApi)
+      await commit('SET_USERNAME', settings.userName)
+      await commit('SET_PASSWORD', settings.password)
+      await commit('SET_ACCESS_TOKEN', settings.accessToken)
+      await commit('SET_CRITICAL_FIX', settings.criticalAge)
+      await commit('SET_HIGH_FIX', settings.highAge)
+    },
+    async fetchAccessToken ({commit, state}) {
+      console.log('fetch accessToken:::::')
+      //console.log(state.userName)
+      //console.log(state.password)
+      let loginSettings = {}
+      loginSettings.id = state.userName
+      loginSettings.password = state.password
       let result = await axios.post(
-          'http://localhost:9090/api/v1/login', 
-          login
+          state.aquaApi + '/api/v1/login', 
+          loginSettings
         )
+      //console.log(result.data.token)
       await commit('SET_ACCESS_TOKEN', result.data.token)
+      
     },
     async fetchNamespaces ({commit, state}) {
       let tokenString = "Bearer " + state.accessToken
-      let response = await axios.get('http://localhost:9090/api/v1/orchestrator/namespaces/names?orderby=name%2Basc', 
+      //console.log('fetchNamespaces token: ' + tokenString)
+      let response = await axios.get(state.aquaApi + '/api/v1/orchestrator/namespaces/names?orderby=name%2Basc', 
         { headers: { Authorization: tokenString } 
       })
       console.log('namespaces: ')
@@ -196,7 +301,7 @@ export default new Vuex.Store({
     async fetchRegistries ({commit, state}) {
       let tokenString = "Bearer " + state.accessToken
       //console.log(tokenString)
-      let response = await axios.get('http://localhost:9090/api/v1/registries', 
+      let response = await axios.get(state.aquaApi + '/api/v1/registries', 
         { headers: { Authorization: tokenString } 
       })
       console.log('registries: ')
@@ -223,11 +328,11 @@ export default new Vuex.Store({
       console.log(repo)
       let response = null
       if (repo !== 'All+Registries') {
-        response = await axios.get('http://localhost:9090/api/v2/images?registry=' + repo + '&page=1&include_totals=true&order_by=name&page_size=1000', 
+        response = await axios.get(state.aquaApi + '/api/v2/images?registry=' + repo + '&page=1&include_totals=true&order_by=name&page_size=1000', 
           { headers: { Authorization: tokenString } 
         })
       } else {
-        response = await axios.get('http://localhost:9090/api/v2/images?page=1&include_totals=true&order_by=name&page_size=1000', 
+        response = await axios.get(state.aquaApi + '/api/v2/images?page=1&include_totals=true&order_by=name&page_size=1000', 
           { headers: { Authorization: tokenString } 
         })
       }
@@ -249,7 +354,7 @@ export default new Vuex.Store({
       await commit('SET_RISKS', [])
       await commit('SET_RISK_TABLE_LOADING', true)
       let tokenString = "Bearer " + state.accessToken
-      let vulnResponse = await axios.get('http://localhost:9090/api/v2/risks/vulnerabilities', 
+      let vulnResponse = await axios.get(state.aquaApi + '/api/v2/risks/vulnerabilities', 
         { 
           headers: { 
             Authorization: tokenString 
@@ -277,7 +382,7 @@ export default new Vuex.Store({
       console.log(riskArray)
       let cleansedImageName = state.imageSelected
       cleansedImageName = cleansedImageName.replace(/:/g, '/')
-      let malwareResponse = await axios.get(`http://localhost:9090/api/v2/images/${state.repoSelected}/${cleansedImageName}/malware`, 
+      let malwareResponse = await axios.get(`${state.aquaApi}/api/v2/images/${state.repoSelected}/${cleansedImageName}/malware`, 
       { 
         headers: { 
           Authorization: tokenString 
@@ -285,7 +390,7 @@ export default new Vuex.Store({
       })
       console.log('Malware:')
       console.log(malwareResponse.data.result)
-      let sensitiveResponse = await axios.get(`http://localhost:9090/api/v2/images/${state.repoSelected}/${cleansedImageName}/sensitive`, 
+      let sensitiveResponse = await axios.get(`${state.aquaApi}/api/v2/images/${state.repoSelected}/${cleansedImageName}/sensitive`, 
       { 
         headers: { 
           Authorization: tokenString 
@@ -341,7 +446,7 @@ export default new Vuex.Store({
       //count: X, page: 1, pagesize: 1000//
       /////////////////////////////////////
       let tokenString = "Bearer " + state.accessToken
-      let response = await axios.get('http://localhost:9090/api/v2/risks/vulnerabilities?include_vpatch_info=true&show_negligible=true&page=1&pagesize=1000&skip_count=false&hide_base_image=false&acknowledge_status=true&order_by=-vendor_severity', 
+      let response = await axios.get(state.aquaApi + '/api/v2/risks/vulnerabilities?include_vpatch_info=true&show_negligible=true&page=1&pagesize=1000&skip_count=false&hide_base_image=false&acknowledge_status=true&order_by=-vendor_severity', 
         { headers: { Authorization: tokenString } 
       })
       console.log('fetchVulnAck: ')
@@ -350,7 +455,7 @@ export default new Vuex.Store({
     },
     async fetchVulnSeverity ({commit, state}, severity) {
       let tokenString = "Bearer " + state.accessToken
-      let result = await axios.get('http://localhost:9090/api/v2/risks/vulnerabilities?include_vpatch_info=true&show_negligible=false&page=1&pagesize=50&skip_count=true&hide_base_image=false&severity=' + severity + '&order_by=-vendor_severity', 
+      let result = await axios.get(state.aquaApi + '/api/v2/risks/vulnerabilities?include_vpatch_info=true&show_negligible=false&page=1&pagesize=50&skip_count=true&hide_base_image=false&severity=' + severity + '&order_by=-vendor_severity', 
         { headers: { Authorization: tokenString } 
       })
       await commit('SET_VULN_SEV', { 
@@ -376,7 +481,7 @@ export default new Vuex.Store({
       console.log('attempting to fetch timeseriesData: ')
       console.log('imageName: ' + imageName)
       console.log('repoName: ' + repoName)
-      let response = await axios.get(`http://localhost:8559/risks?from=${state.from}&to=${state.to}&imageName=${imageName}&repoName=${repoName}`)
+      let response = await axios.get(`${state.timeseriesApi}/risks?from=${state.from}&to=${state.to}&imageName=${imageName}&repoName=${repoName}`)
       console.log('timeseriesData')
       console.log(response.data)
       timeseriesData.critVuln = response.data.map(image => image.critVulns)
