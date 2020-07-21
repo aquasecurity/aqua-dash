@@ -34,7 +34,7 @@
         > </VulnCard>
       </v-row>
       <v-row xs12>
-        <v-col cols="12" sm="2" justify-left>
+        <v-col cols="12" sm="3" justify-left>
           <v-row>
             <AttentionCard 
               class="item" 
@@ -43,7 +43,7 @@
             > </AttentionCard>
           </v-row>
         </v-col>
-        <v-col cols="12" sm="10">
+        <v-col cols="12" sm="9">
           <TimeseriesCard
             :imageName="imageSelected"
             :repoName="repoSelected"

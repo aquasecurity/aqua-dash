@@ -1,6 +1,5 @@
 <template>
   <div>
-
   <v-card
     tile
     elevation="5"
@@ -13,26 +12,50 @@
       </span>
     </v-card-title>
     <div class="text-center">
-      <v-chip
-      class="ma-2"
-      color="#be0000"
-      text-color="white"
-      x-large
-      label
-      >
-        <h1>{{vuln.vulnsFixNeeded}}</h1>
-      </v-chip>
-      <v-chip
-      class="ma-2"
-      color="info"
-      text-color="white"
-      x-large
-      label
-      >
-        <h1>{{vuln.daysRemaining}}</h1>
-        <br>
-        <h5> Days</h5>
-      </v-chip>
+      <v-col>
+        <v-row>
+          <v-chip
+          class="ma-2"
+          color="#8b0000"
+          text-color="white"
+          x-large
+          label
+          >
+            <h1>{{vuln.vulnsFixNeededCritical}}</h1>
+          </v-chip>
+          <v-chip
+          class="ma-2"
+          color="info"
+          text-color="white"
+          x-large
+          label
+          >
+            <h1>{{vuln.daysRemainingCritical}}</h1>
+            <h5> Days</h5>
+          </v-chip>
+        </v-row>
+        <v-row>
+          <v-chip
+          class="ma-2"
+          color="#d80000"
+          text-color="white"
+          x-large
+          label
+          >
+            <h1>{{vuln.vulnsFixNeededHigh}}</h1>
+          </v-chip>
+          <v-chip
+          class="ma-2"
+          color="info"
+          text-color="white"
+          x-large
+          label
+          >
+            <h1>{{vuln.daysRemainingHigh}}</h1>
+            <h5> Days</h5>
+          </v-chip>
+        </v-row>
+    </v-col>
     </div>
   </v-card>
   </div>
@@ -79,10 +102,12 @@ import moment from 'moment'
         let dateSortedArray = Object.keys(dateHash).sort()
         //console.log(dateSortedArray)
         return {
-          vulnsFixNeeded: crit_vulns + high_vulns,
+          vulnsFixNeededCritical: crit_vulns,
+          vulnsFixNeededHigh: high_vulns,
           sensitive: sensitive_data,
           malware: malware,
-          daysRemaining: this.daysRemaining(dateSortedArray[0])
+          daysRemainingCritical: this.daysRemaining(dateSortedArray[0], 'critical'),
+          daysRemainingHigh: this.daysRemaining(dateSortedArray[0], 'high')
         }
       }
     },
@@ -102,14 +127,22 @@ import moment from 'moment'
       getStats(ofWhat) {
         console.log(ofWhat)
       },
-      daysRemaining (date) {
+      daysRemaining (date, vulnType) {
+        console.log('daysRemaining date:')
+        console.log(date)
         console.log('high days')
-        console.log(this.$store.getters.highAge)
-        let daysToFix = this.$store.getters.highAge
+        let daysToFix = null
+        if (vulnType === 'critical') {
+          daysToFix = parseInt(this.$store.getters.criticalAge, 10)
+        } else if (vulnType === 'high') {
+          daysToFix = parseInt(this.$store.getters.highAge, 10)
+        }
+        console.log(daysToFix)
         let orignDate = moment(date)
         var todayDate = moment(new Date)
         let diffDay = orignDate.diff(todayDate, 'days')
         console.log(diffDay)
+        console.log(daysToFix)
         return (daysToFix + diffDay)
       }
     }
