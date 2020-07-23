@@ -49,10 +49,11 @@ export default new Vuex.Store({
     imageSelected: null,
     repoSelected: null,
     timeseriesData: null,
-    from: moment().subtract(1, 'months'),
+    from: moment().subtract(15, 'days'),
     to: moment(),
     risks: [],
-    riskTableLoading: false
+    riskTableLoading: false,
+    allRisks: []
   },
   getters: {
     initRequired (state) {
@@ -126,6 +127,9 @@ export default new Vuex.Store({
     },
     riskTableLoading (state) {
       return state.riskTableLoading
+    },
+    allRisks (state) {
+      return state.allRisks
     }
   },
   mutations: {
@@ -252,6 +256,11 @@ export default new Vuex.Store({
       if (riskTableLoading) {
         state.riskTableLoading = riskTableLoading
       }
+    },
+    CONCAT_ALL_RISKS (state, risks) {
+      if (risks) {
+        state.allRisks = [...state.allRisks, ...risks]
+      }
     }
   },
   actions: {
@@ -348,6 +357,41 @@ export default new Vuex.Store({
       await commit('SET_IMAGES', response.data.result ? response.data.result : [])
       //console.log(result.data)
     },
+    async fetchAllRisks ({commit, state}) {
+      console.log('########fetchAllRisks############')
+      let pageSize = 1000
+      //let pageNumber = 1
+      //let totalCount = 0
+      let tokenString = "Bearer " + state.accessToken
+      let vulnResponse = null
+      let pageLoop = 1
+      for (var i = 0; i < pageLoop; i++) {
+        vulnResponse = await axios.get(
+          state.aquaApi + '/api/v2/risks/vulnerabilities',
+        { 
+          headers: { 
+            Authorization: tokenString 
+          },
+          params: {
+            include_vpatch_info: 'true',
+            page: i + 1,
+            pagesize: pageSize,
+            skip_count: false,
+            hide_base_image: false,
+            show_negligible: true,
+            order_by: '-aqua_severity'
+          }
+        })
+        if (i === 0) {
+          pageLoop = Math.ceil(vulnResponse.data.count/pageSize)
+        }
+        console.log(`######### pageCount: ${vulnResponse.data.count}`)
+        console.log(`######### pageLoop: page ${i + 1} of ${pageLoop}`)
+        console.log(`######### riskCount: ${vulnResponse.data.result.length}`)
+        await commit('CONCAT_ALL_RISKS', vulnResponse.data.result)
+      }
+      console.log(`######### allRisks length: ${state.allRisks.length}`)
+    },
     async fetchRisks ({commit, state}) {
       //https://testdrive656.aquasec.com/api/v2/images/aquademo/malware-example/latest/malware
       //https://testdrive656.aquasec.com/api/v2/images/aquademo/malware-example/latest/sensitive
@@ -371,10 +415,14 @@ export default new Vuex.Store({
           }
       })
       let riskArray = []
+      let riskArrayWithVpatch = []
       //response.data.result ? response.data.result : []
       for (let i = 0; i < vulnResponse.data.result.length; i++) {
         if (vulnResponse.data.result[i].aqua_severity !== 'medium') {
           riskArray.push(vulnResponse.data.result[i])
+          if (vulnResponse.data.result[i].v_patch_status === 'patch_available') {
+            riskArrayWithVpatch.push(vulnResponse.data.result[i])
+          }
         }
       }
       

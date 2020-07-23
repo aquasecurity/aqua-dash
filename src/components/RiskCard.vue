@@ -38,39 +38,46 @@
 		data () {
 			return {
 				headers: [
-				{
-					text: 'Vulnerabilities',
-					align: 'start',
-					value: 'name',
-					groupable: false,
-					sortable: false
-				},
-				{ 
-					text: 'Issue Description',
-					value: 'description',
-					align: 'left',
-					groupable: false,
-					sortable: false
-				},
-				{ 
-					text: 'Severity',
-					value: 'aqua_severity',
-					align: 'right'
-				},
-				{ 
-					text: 'Remediation',
-					value: 'solution',
-					align: 'left',
-					groupable: false,
-					sortable: false
-				},
-				{ 
-					text: 'Link to Aqua',
-					value: 'nvd_url',
-					align: 'left',
-					groupable: false,
-					sortable: false
-				}
+					{
+						text: 'Vulnerabilities',
+						align: 'start',
+						value: 'name',
+						groupable: false,
+						sortable: false
+					},
+					{ 
+						text: 'Issue Description',
+						value: 'description',
+						align: 'left',
+						groupable: false,
+						sortable: false
+					},
+					{ 
+						text: 'Severity',
+						value: 'aqua_severity',
+						align: 'right'
+					},
+					{ 
+						text: 'Vshield',
+						value: 'v_patch_status',
+						align: 'right',
+						groupable: false,
+						sortable: false
+					},
+					{ 
+						text: 'Remediation',
+						value: 'solution',
+						align: 'left',
+						groupable: false,
+						sortable: false
+					},
+					{ 
+						text: 'Link to Aqua',
+						value: 'nvd_url',
+						align: 'left',
+						groupable: false,
+						sortable: false
+					}
 				],
 			}
 		},

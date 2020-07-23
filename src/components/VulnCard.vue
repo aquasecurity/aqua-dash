@@ -138,6 +138,30 @@
         </v-chip>
       </div>
     </v-card>
+    <v-spacer/>
+    <v-card
+      tile
+      elevation="5"
+      class="rounded-card"
+      height="auto"
+    >
+      <v-card-title class="justify-center">
+        <span class="title font-weight-light ">
+        VSHIELD
+        </span>
+      </v-card-title>
+      <div class="text-center">
+        <v-chip
+        class="ma-2"
+        color="info"
+        text-color="white"
+        x-large
+        label
+        >
+          <h1>{{vshieldCount}}</h1>
+        </v-chip>
+      </div>
+    </v-card>
   </v-row>
 </template>
 
@@ -202,6 +226,35 @@ export default {
     },
     image () {
       return this.$store.getters.imageSelected
+    },
+    vshieldCount () {
+      //let that = this
+      let imgSel = this.$store.getters.imageSelected
+      let repSel = this.$store.getters.repoSelected
+      let vshieldArray  = this.$store.getters.allRisks.filter(function(obj) {
+        if (imgSel && repSel) {
+          return (
+            (obj.v_patch_status === "patch_available")
+            && (obj.registry === repSel)
+            && (obj.image_name === imgSel)
+          )
+        } else if ( repSel && (!imgSel || imgSel === 'All Images')) {
+          return (
+            (obj.v_patch_status === "patch_available")
+            && (obj.registry === repSel)
+          )
+        } else if ( imgSel && !repSel && imgSel !== 'All Images') {
+          return (
+            (obj.v_patch_status === "patch_available")
+            && (obj.image_name === imgSel)
+          )
+        }
+        else {
+          return (obj.v_patch_status === "patch_available")
+        }
+        //return (obj.v_patch_status === "patch_available") //&& (obj.age < 30)
+      })
+      return vshieldArray.length
     }
   },
   created () {

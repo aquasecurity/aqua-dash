@@ -131,6 +131,7 @@ export default {
       await this.fetchImages('All Registries')
       this.fetchVulnAck()
       this.fetchTimeseriesData()
+      this.fetchAllRisks()
       this.isLoading = false
     } catch (err) {
       console.log(err)
@@ -157,7 +158,8 @@ export default {
       'fetchNamespaces',
       'fetchRegistries',
       'fetchImages',
-      'fetchTimeseriesData'
+      'fetchTimeseriesData',
+      'fetchAllRisks'
     ]),
     pollData () {
       this.polling = setInterval(() => {
