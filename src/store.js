@@ -360,8 +360,6 @@ export default new Vuex.Store({
     async fetchAllRisks ({commit, state}) {
       console.log('########fetchAllRisks############')
       let pageSize = 1000
-      //let pageNumber = 1
-      //let totalCount = 0
       let tokenString = "Bearer " + state.accessToken
       let vulnResponse = null
       let pageLoop = 1

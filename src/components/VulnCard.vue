@@ -17,29 +17,66 @@
         text-color="white"
         x-large
         label
+        @click.stop="criticalDialog = true"
         >
-          <!--span class="title font-weight-light "-->
-            <h1>{{vuln.critical}}</h1>
-          <!--/span-->
+          <h1>{{vuln.critical}}</h1>
         </v-chip>
+        <v-dialog
+          v-model="criticalDialog"
+          max-width="75%"
+          transition="fab-transition"
+          origin="top left"
+        >
+          <DetailsCard
+            :risks="criticalVulns"
+            :title="'critical'"
+          >
+          </DetailsCard>
+        </v-dialog>
         <v-chip
         class="ma-2"
         color="#d80000"
         text-color="white"
         x-large
         label
+        @click.stop="highDialog = true"
         >
           <h1>{{vuln.high}}</h1>
         </v-chip>
+        <v-dialog
+          v-model="highDialog"
+          max-width="75%"
+          transition="fab-transition"
+          origin="top left"
+        >
+          <DetailsCard
+            :risks="highVulns"
+            :title="'high'"
+          >
+          </DetailsCard>
+        </v-dialog>
         <v-chip
         class="ma-2"
         color="warning"
         text-color="white"
         x-large
         label
+        @click.stop="mediumDialog = true"
         >
           <h1>{{vuln.med}}</h1>
         </v-chip>
+        <v-dialog
+          v-model="mediumDialog"
+          max-width="75%"
+          transition="fab-transition"
+          origin="top left"
+        >
+          <DetailsCard
+            :risks="mediumVulns"
+            :title="'medium'"
+          >
+          </DetailsCard>
+        </v-dialog>
     </v-card>
     <v-spacer/>
     <v-card
@@ -109,9 +146,22 @@
         text-color="white"
         x-large
         label
+        @click.stop="unackDialog = true"
         >
           <h1>{{vuln.unacknowledged}}</h1>
         </v-chip>
+        <v-dialog
+          v-model="unackDialog"
+          max-width="75%"
+          transition="fab-transition"
+          origin="top right"
+        >
+          <DetailsCard
+            :risks="unacknowledged"
+            :title="'unacknowledged'"
+          >
+          </DetailsCard>
+        </v-dialog>
       </div>
     </v-card>
     <v-spacer/>
@@ -133,9 +183,23 @@
         text-color="white"
         x-large
         label
+        @click.stop="ackDialog = true"
         >
-          <h1>{{vuln.acknowledged}}</h1>
+          <!--h1>{{vuln.acknowledged}}</h1-->
+          <h1>{{acknowledged.length}}</h1>
         </v-chip>
+        <v-dialog
+          v-model="ackDialog"
+          max-width="75%"
+          transition="fab-transition"
+          origin="top right"
+        >
+          <DetailsCard
+            :risks="acknowledged"
+            :title="'acknowledged'"
+          >
+          </DetailsCard>
+        </v-dialog>
       </div>
     </v-card>
     <v-spacer/>
@@ -147,7 +211,7 @@
     >
       <v-card-title class="justify-center">
         <span class="title font-weight-light ">
-        VSHIELD
+        VSHIELDED
         </span>
       </v-card-title>
       <div class="text-center">
@@ -157,9 +221,22 @@
         text-color="white"
         x-large
         label
+        @click.stop="vshieldDialog = true"
         >
-          <h1>{{vshieldCount}}</h1>
+          <h1>{{vshielded.length}}</h1>
         </v-chip>
+        <v-dialog
+          v-model="vshieldDialog"
+          max-width="75%"
+          transition="fab-transition"
+          origin="top right"
+        >
+          <DetailsCard
+            :risks="vshielded"
+            :title="'vshielded'"
+          >
+          </DetailsCard>
+        </v-dialog>
       </div>
     </v-card>
   </v-row>
@@ -167,13 +244,24 @@
 
 <script>
 import {mapActions} from 'vuex'
+import DetailsCard from '../components/DetailsCard.vue'
+import moment from 'moment'
 export default {
   data: () => ({
-    polling: null
+    polling: null,
+    vshieldDialog: false,
+    ackDialog: false,
+    unackDialog: false,
+    criticalDialog: false,
+    highDialog: false,
+    mediumDialog: false
   }),
   props: [
     
   ],
+  components: {
+    DetailsCard
+  },
   computed: {
     vuln () {
       let vulns = this.$store.getters.images
@@ -227,34 +315,183 @@ export default {
     image () {
       return this.$store.getters.imageSelected
     },
-    vshieldCount () {
+    criticalVulns () {
+      //let that = this
+      let imgSel = this.$store.getters.imageSelected
+      let repSel = this.$store.getters.repoSelected
+      let criticalVulns  = this.$store.getters.allRisks.filter(function(obj) {
+        if (imgSel && repSel) {
+          return (
+            (obj.aqua_severity === 'critical')
+            && (obj.registry === repSel)
+            && (obj.image_name === imgSel)
+          )
+        } else if ( repSel && (!imgSel || imgSel === 'All Images')) {
+          return (
+            (obj.aqua_severity === 'critical')
+            && (obj.registry === repSel)
+          )
+        } else if ( imgSel && !repSel && imgSel !== 'All Images') {
+          return (
+            (obj.aqua_severity === 'critical')
+            && (obj.image_name === imgSel)
+          )
+        }
+        else {
+          return (obj.aqua_severity === 'critical')
+        }
+        //return (obj.v_patch_status === "patch_available") //&& (obj.age < 30)
+      })
+      return criticalVulns
+    },
+    highVulns () {
+      //let that = this
+      let imgSel = this.$store.getters.imageSelected
+      let repSel = this.$store.getters.repoSelected
+      let highVulns  = this.$store.getters.allRisks.filter(function(obj) {
+        if (imgSel && repSel) {
+          return (
+            (obj.aqua_severity === 'high')
+            && (obj.registry === repSel)
+            && (obj.image_name === imgSel)
+          )
+        } else if ( repSel && (!imgSel || imgSel === 'All Images')) {
+          return (
+            (obj.aqua_severity === 'high')
+            && (obj.registry === repSel)
+          )
+        } else if ( imgSel && !repSel && imgSel !== 'All Images') {
+          return (
+            (obj.aqua_severity === 'high')
+            && (obj.image_name === imgSel)
+          )
+        }
+        else {
+          return (obj.aqua_severity === 'high')
+        }
+        //return (obj.v_patch_status === "patch_available") //&& (obj.age < 30)
+      })
+      return highVulns
+    },
+    mediumVulns () {
+      //let that = this
+      let imgSel = this.$store.getters.imageSelected
+      let repSel = this.$store.getters.repoSelected
+      let mediumVulns  = this.$store.getters.allRisks.filter(function(obj) {
+        if (imgSel && repSel) {
+          return (
+            (obj.aqua_severity === 'medium')
+            && (obj.registry === repSel)
+            && (obj.image_name === imgSel)
+          )
+        } else if ( repSel && (!imgSel || imgSel === 'All Images')) {
+          return (
+            (obj.aqua_severity === 'medium')
+            && (obj.registry === repSel)
+          )
+        } else if ( imgSel && !repSel && imgSel !== 'All Images') {
+          return (
+            (obj.aqua_severity === 'medium')
+            && (obj.image_name === imgSel)
+          )
+        }
+        else {
+          return (obj.aqua_severity === 'medium')
+        }
+        //return (obj.v_patch_status === "patch_available") //&& (obj.age < 30)
+      })
+      return mediumVulns
+    },
+    vshielded () {
       //let that = this
       let imgSel = this.$store.getters.imageSelected
       let repSel = this.$store.getters.repoSelected
       let vshieldArray  = this.$store.getters.allRisks.filter(function(obj) {
         if (imgSel && repSel) {
           return (
-            (obj.v_patch_status === "patch_available")
+            (obj.v_patch_enforced_on)
             && (obj.registry === repSel)
             && (obj.image_name === imgSel)
           )
         } else if ( repSel && (!imgSel || imgSel === 'All Images')) {
           return (
-            (obj.v_patch_status === "patch_available")
+            (obj.v_patch_enforced_on)
             && (obj.registry === repSel)
           )
         } else if ( imgSel && !repSel && imgSel !== 'All Images') {
           return (
-            (obj.v_patch_status === "patch_available")
+            (obj.v_patch_enforced_on)
             && (obj.image_name === imgSel)
           )
         }
         else {
-          return (obj.v_patch_status === "patch_available")
+          return (obj.v_patch_enforced_on)
         }
         //return (obj.v_patch_status === "patch_available") //&& (obj.age < 30)
       })
-      return vshieldArray.length
+      return vshieldArray
+    },
+    acknowledged () {
+      //let that = this
+      let imgSel = this.$store.getters.imageSelected
+      let repSel = this.$store.getters.repoSelected
+      let acknowledgedArray  = this.$store.getters.allRisks.filter(function(obj) {
+        if (imgSel && repSel) {
+          return (
+            (moment(obj.acknowledged_date).isAfter('1970-01-01T00:00:00Z'))
+            && (obj.registry === repSel)
+            && (obj.image_name === imgSel)
+          )
+        } else if ( repSel && (!imgSel || imgSel === 'All Images')) {
+          return (
+            (moment(obj.acknowledged_date).isAfter('1970-01-01T00:00:00Z'))
+            && (obj.registry === repSel)
+          )
+        } else if ( imgSel && !repSel && imgSel !== 'All Images') {
+          return (
+            (moment(obj.acknowledged_date).isAfter('1970-01-01T00:00:00Z'))
+            && (obj.image_name === imgSel)
+          )
+        }
+        else {
+          return (
+            moment(obj.acknowledged_date).isAfter('1970-01-01T00:00:00Z')
+          )
+        }
+        //return (obj.v_patch_status === "patch_available") //&& (obj.age < 30)
+      })
+      return acknowledgedArray
+    },
+    unacknowledged () {
+      //let that = this
+      let imgSel = this.$store.getters.imageSelected
+      let repSel = this.$store.getters.repoSelected
+      let unacknowledgedArray  = this.$store.getters.allRisks.filter(function(obj) {
+        if (imgSel && repSel) {
+          return (
+            (moment(obj.acknowledged_date).isSame('1970-01-01T00:00:00Z'))
+            && (obj.registry === repSel)
+            && (obj.image_name === imgSel)
+          )
+        } else if ( repSel && (!imgSel || imgSel === 'All Images')) {
+          return (
+            (moment(obj.acknowledged_date).isSame('1970-01-01T00:00:00Z'))
+            && (obj.registry === repSel)
+          )
+        } else if ( imgSel && !repSel && imgSel !== 'All Images') {
+          return (
+            (moment(obj.acknowledged_date).isSame('1970-01-01T00:00:00Z'))
+            && (obj.image_name === imgSel)
+          )
+        }
+        else {
+          return (
+            moment(obj.acknowledged_date).isSame('1970-01-01T00:00:00Z')
+          )
+        }
+        //return (obj.v_patch_status === "patch_available") //&& (obj.age < 30)
+      })
+      return unacknowledgedArray
     }
   },
   created () {
