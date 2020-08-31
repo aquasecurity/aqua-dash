@@ -3,13 +3,6 @@ import Vuex from 'vuex'
 import axios from 'axios'
 import moment from 'moment'
 
-/*
-const login = {
-  id: 'administrator',
-  password: 'NzgxYzll'
-}
-*/
-
 // Function to compute timestamp 
 // from mongodb's document _id 
 function getTimestamp (objectId) {
@@ -18,10 +11,6 @@ function getTimestamp (objectId) {
       parseInt(objectId.substring(0, 8), 16) * 1000)
   ).format('DD-MM-YY HH:mm')
 }
-
-//axios.defaults.baseURL = 'http://138.68.36.184/api'
-//axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
-//axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 
 Vue.use(Vuex)
 
@@ -35,6 +24,7 @@ export default new Vuex.Store({
     accessToken: null,
     criticalAge: null,
     highAge: null,
+    rememberMe: null,
     namespaces: [],
     registries: [],
     imagesText: [],
@@ -79,6 +69,9 @@ export default new Vuex.Store({
     },
     highAge (state) {
       return state.highAge
+    },
+    rememberMe (state) {
+      return state.rememberMe
     },
     namespaces (state) {
       return state.namespaces
@@ -140,20 +133,19 @@ export default new Vuex.Store({
         = localStorage.getItem('timeseriesApi')
       state.userName 
         = localStorage.getItem('userName')
-      state.password
-        = localStorage.getItem('password')
       state.accessToken
         = localStorage.getItem('accessToken')
       state.criticalAge
         = localStorage.getItem('criticalAge') || 7
       state.highAge
         = localStorage.getItem('highAge') || 30
+      state.rememberMe = (localStorage.getItem('rememberMe') === 'true' ? true : false)
       
       if (
         !state.aquaApi || 
         !state.timeseriesApi || 
         !state.userName || 
-        !state.password
+        !state.accessToken
       ) {
         state.initRequired = true
       }
@@ -172,11 +164,11 @@ export default new Vuex.Store({
     },
     SET_PASSWORD (state, password) {
       state.password = password
-      localStorage.setItem('password', password)
+      //localStorage.setItem('password', password)
     },
     SET_ACCESS_TOKEN (state, accessToken) {
       state.accessToken = accessToken
-      localStorage.setItem('accessToken', accessToken)
+      localStorage.setItem('accessToken', (state.rememberMe ? accessToken : ''))
     },
     SET_CRITICAL_FIX (state, criticalAge) {
       state.criticalAge = criticalAge
@@ -185,6 +177,10 @@ export default new Vuex.Store({
     SET_HIGH_FIX (state, highAge) {
       state.highAge = highAge
       localStorage.setItem('highAge', highAge)
+    },
+    SET_REMEMBER_ME (state, rememberMe) {
+      state.rememberMe = rememberMe
+      localStorage.setItem('rememberMe', rememberMe)
     },
     SET_NAMESPACES (state, namespaces) {
       if (namespaces) {
@@ -265,8 +261,7 @@ export default new Vuex.Store({
   },
   actions: {
     async initializeStore ({commit}) {
-      console.log('initializeStore called:::::' + localStorage.getItem('aquaApi'))
-
+      console.log('initializeStore called')
       await commit('INITIALIZE_STORE')
     },
     async saveSettings ({commit}, settings) {
@@ -277,6 +272,7 @@ export default new Vuex.Store({
       await commit('SET_ACCESS_TOKEN', settings.accessToken)
       await commit('SET_CRITICAL_FIX', settings.criticalAge)
       await commit('SET_HIGH_FIX', settings.highAge)
+      await commit('SET_REMEMBER_ME', settings.rememberMe)
     },
     async fetchAccessToken ({commit, state}) {
       console.log('fetch accessToken:::::')
@@ -285,13 +281,13 @@ export default new Vuex.Store({
       let loginSettings = {}
       loginSettings.id = state.userName
       loginSettings.password = state.password
+      loginSettings.remember = state.rememberMe
       let result = await axios.post(
           state.aquaApi + '/api/v1/login', 
           loginSettings
         )
       //console.log(result.data.token)
       await commit('SET_ACCESS_TOKEN', result.data.token)
-      
     },
     async fetchNamespaces ({commit, state}) {
       let tokenString = "Bearer " + state.accessToken
@@ -482,8 +478,6 @@ export default new Vuex.Store({
       console.log(riskArray)
       await commit('SET_RISKS', riskArray)
       await commit('SET_RISK_TABLE_LOADING', false)
-      
-      
     },
     async fetchVulnAck ({commit, state}) {
       /////////////////////////////////////

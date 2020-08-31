@@ -79,7 +79,7 @@
       hint="Recommended 7 to 30 days"
     ></v-text-field>
     <v-checkbox
-      v-model="rememberMe"
+      v-model="settings.rememberMe"
       :label="rememberMeText"
       dense
     ></v-checkbox>
@@ -118,7 +118,6 @@
       saveAndGoLoading: false,
       error: false,
       errorText: null,
-      rememberMe: false,
       rememberMeText: 'Remember me for 30 days'
 		}),
 		created: function () {
@@ -129,6 +128,9 @@
       this.settings.accessToken = this.$store.getters.accessToken
       this.settings.criticalAge = this.$store.getters.criticalAge
       this.settings.highAge = this.$store.getters.highAge
+      this.settings.rememberMe = this.$store.getters.rememberMe
+      console.log('SETTINGS PAGE: ')
+      console.log(this.settings.rememberMe)
 		},
 		methods: {
       ...mapActions([

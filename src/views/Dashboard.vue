@@ -116,14 +116,14 @@ export default {
     this.pollData()
     try {
       this.isLoading = true
-      //await this.initializeStore()
-      await this.fetchAccessToken()
-      await this.fetchNamespaces()
-      await this.fetchRegistries()
-      await this.fetchImages('All Registries')
-      this.fetchVulnAck()
-      this.fetchTimeseriesData()
-      this.fetchAllRisks()
+      if (this.$store.getters.accessToken) {
+        await this.fetchNamespaces()
+        await this.fetchRegistries()
+        await this.fetchImages('All Registries')
+        this.fetchVulnAck()
+        this.fetchTimeseriesData()
+        this.fetchAllRisks()
+      }
       this.isLoading = false
     } catch (err) {
       console.log(err)
@@ -136,7 +136,7 @@ export default {
     }
   },
   async created () {
-      //await this.initializeStore()
+
   },
   beforeDestroy () {
       clearInterval(this.polling)
@@ -156,7 +156,6 @@ export default {
     pollData () {
       this.polling = setInterval(() => {
         console.log('Dashboard polling...')
-        //this.fetchVuln()
         this.fetchVulnAck()
       }, 60000)
     }
