@@ -53,7 +53,7 @@
       @click:append="showPassword = !showPassword"
       dense
     ></v-text-field>
-    <v-textarea
+    <!--v-textarea
       outlined
       name="accessToken"
       v-model="settings.accessToken"
@@ -61,7 +61,7 @@
       prepend-inner-icon="mdi-key"
       rows="2"
       dense
-    ></v-textarea>
+    ></v-textarea-->
     <v-text-field
       label="Critical days to fix"
       name="critalDays"

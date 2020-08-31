@@ -34,15 +34,6 @@
         > </VulnCard>
       </v-row>
       <v-row xs12>
-        <v-col cols="12" sm="3" justify-left>
-          <v-row>
-            <AttentionCard 
-              class="item" 
-              :statsType="outstanding"
-              :stats="stats"
-            > </AttentionCard>
-          </v-row>
-        </v-col>
         <v-col cols="12" sm="9">
           <TimeseriesCard
             :imageName="imageSelected"
@@ -51,12 +42,13 @@
           >
           </TimeseriesCard>
         </v-col>
+        <v-col cols="12" sm="3">
+          <AttentionCard 
+            :statsType="outstanding"
+            :stats="stats"
+          > </AttentionCard>
+        </v-col>
       </v-row>
-    </v-col>
-  </v-row>
-  <v-row>
-    <v-col cols="12" sm="12">
-      <RiskCard/>
     </v-col>
   </v-row>
   </v-container>
@@ -69,7 +61,7 @@ import SelectCard from '../components/SelectCard.vue'
 import VulnCard from '../components/VulnCard.vue'
 import TimeseriesCard from '../components/TimeseriesCard.vue'
 import AttentionCard from '../components/AttentionCard.vue'
-import RiskCard from '../components/RiskCard.vue'
+//import RiskCard from '../components/RiskCard.vue'
 import Loading from 'vue-loading-overlay'
 import 'vue-loading-overlay/dist/vue-loading.css'
 
@@ -94,7 +86,7 @@ export default {
     VulnCard,
     TimeseriesCard,
     AttentionCard,
-    RiskCard,
+    //RiskCard,
     Loading
   },
   computed: {

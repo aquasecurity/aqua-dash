@@ -1,7 +1,7 @@
 <template>
   <v-card
     tile
-    elevation="5"
+    elevation="0"
     class="rounded-card"
     width="80%"
     height="auto"
@@ -10,7 +10,7 @@
       <v-layout
         align-center
       >
-        <v-col cols="12" sm="12">
+        <v-col>
           Projects/namespaces
           <v-overflow-btn
             class="projects"

@@ -2,7 +2,7 @@
   <v-row xs12>
     <v-card
       tile
-      elevation="5"
+      elevation="0"
       class="rounded-card"
       height="auto"
     >
@@ -13,75 +13,88 @@
       </v-card-title>
         <v-chip
         class="ma-2"
-        color="#8b0000"
-        text-color="white"
+        color="rgba(129,2,1,0.2)"
+        text-color="error darken-4"
+        borderWidth="4"
         x-large
         label
         @click.stop="criticalDialog = true"
         >
-          <h1>{{vuln.critical}}</h1>
+          <h1>
+            <AnimatedNumber
+            :number="vuln.critical"
+            >
+            </AnimatedNumber>
+          </h1>
         </v-chip>
         <v-dialog
           v-model="criticalDialog"
           max-width="75%"
-          transition="fab-transition"
-          origin="top left"
+          overlay-opacity="0.9"
         >
-          <DetailsCard
+          <DetailVulnCard
             :risks="criticalVulns"
             :title="'critical'"
           >
-          </DetailsCard>
+          </DetailVulnCard>
         </v-dialog>
         <v-chip
         class="ma-2"
-        color="#d80000"
-        text-color="white"
+        color="rgba(191,1,37,0.2)"
+        text-color="error darken-2"
         x-large
         label
         @click.stop="highDialog = true"
         >
-          <h1>{{vuln.high}}</h1>
+          <h1>
+            <AnimatedNumber
+            :number="vuln.high"
+            >
+            </AnimatedNumber>
+          </h1>
         </v-chip>
         <v-dialog
           v-model="highDialog"
           max-width="75%"
-          transition="fab-transition"
-          origin="top left"
+          overlay-opacity="0.9"
         >
-          <DetailsCard
+          <DetailVulnCard
             :risks="highVulns"
             :title="'high'"
           >
-          </DetailsCard>
+          </DetailVulnCard>
         </v-dialog>
         <v-chip
         class="ma-2"
-        color="warning"
-        text-color="white"
+        color="rgba(219,114,3,0.2)"
+        text-color="warning darken-1"
         x-large
         label
         @click.stop="mediumDialog = true"
         >
-          <h1>{{vuln.med}}</h1>
+          <h1>
+            <AnimatedNumber
+            :number="vuln.med"
+            >
+            </AnimatedNumber>
+          </h1>
         </v-chip>
         <v-dialog
           v-model="mediumDialog"
           max-width="75%"
-          transition="fab-transition"
-          origin="top left"
+          overlay-opacity="0.9"
         >
-          <DetailsCard
+          <DetailVulnCard
             :risks="mediumVulns"
             :title="'medium'"
           >
-          </DetailsCard>
+          </DetailVulnCard>
         </v-dialog>
     </v-card>
     <v-spacer/>
     <v-card
       tile
-      elevation="5"
+      elevation="0"
       class="rounded-card"
       height="auto"
     >
@@ -93,19 +106,24 @@
       <div class="text-center">
         <v-chip
         class="ma-2"
-        color="warning"
-        text-color="white"
+        color="rgba(245,127,24,0.2)"
+        text-color="yellow darken-4"
         x-large
         label
         >
-          <h1>{{vuln.sensitive}}</h1>
+          <h1>
+            <AnimatedNumber
+            :number="vuln.sensitive"
+            >
+            </AnimatedNumber>
+          </h1>
         </v-chip>
       </div>
     </v-card>
     <v-spacer/>
     <v-card
       tile
-      elevation="5"
+      elevation="0"
       class="rounded-card"
       height="auto"
     >
@@ -117,12 +135,17 @@
       <div class="text-center">
         <v-chip
         class="ma-2"
-        color="warning"
-        text-color="white"
+        color="rgba(245,127,24,0.2)"
+        text-color="yellow darken-4"
         x-large
         label
         >
-          <h1>{{vuln.malware}}</h1>
+          <h1>
+            <AnimatedNumber
+            :number="vuln.malware"
+            >
+            </AnimatedNumber>
+          </h1>
         </v-chip>
       </div>
     </v-card>
@@ -130,7 +153,7 @@
     <v-spacer/>
     <v-card
       tile
-      elevation="5"
+      elevation="0"
       class="rounded-card"
       height="auto"
     >
@@ -142,32 +165,36 @@
       <div class="text-center">
         <v-chip
         class="ma-2"
-        color="warning"
-        text-color="white"
+        color="rgba(249,168,36,0.2)"
+        text-color="yellow darken-3"
         x-large
         label
         @click.stop="unackDialog = true"
         >
-          <h1>{{vuln.unacknowledged}}</h1>
+          <h1>
+            <AnimatedNumber
+            :number="vuln.unacknowledged"
+            >
+            </AnimatedNumber>
+          </h1>
         </v-chip>
         <v-dialog
           v-model="unackDialog"
           max-width="75%"
-          transition="fab-transition"
-          origin="top right"
+          overlay-opacity="0.9"
         >
-          <DetailsCard
+          <DetailUnAckCard
             :risks="unacknowledged"
             :title="'unacknowledged'"
           >
-          </DetailsCard>
+          </DetailUnAckCard>
         </v-dialog>
       </div>
     </v-card>
     <v-spacer/>
     <v-card
       tile
-      elevation="5"
+      elevation="0"
       class="rounded-card"
       height="auto"
     >
@@ -179,33 +206,37 @@
       <div class="text-center">
         <v-chip
         class="ma-2"
-        color="success"
-        text-color="white"
+        color="rgba(44,149,56,0.2)"
+        text-color="success darken-1"
         x-large
         label
         @click.stop="ackDialog = true"
         >
           <!--h1>{{vuln.acknowledged}}</h1-->
-          <h1>{{acknowledged.length}}</h1>
+          <h1>
+            <AnimatedNumber
+            :number="acknowledged.length"
+            >
+            </AnimatedNumber>
+          </h1>
         </v-chip>
         <v-dialog
           v-model="ackDialog"
-          max-width="75%"
-          transition="fab-transition"
-          origin="top right"
+          max-width="95%"
+          overlay-opacity="0.9"
         >
-          <DetailsCard
+          <DetailAckCard
             :risks="acknowledged"
             :title="'acknowledged'"
           >
-          </DetailsCard>
+          </DetailAckCard>
         </v-dialog>
       </div>
     </v-card>
     <v-spacer/>
     <v-card
       tile
-      elevation="5"
+      elevation="0"
       class="rounded-card"
       height="auto"
     >
@@ -217,25 +248,30 @@
       <div class="text-center">
         <v-chip
         class="ma-2"
-        color="info"
-        text-color="white"
+        color="rgba(1,124,214,0.2)"
+        text-color="info darken-1"
         x-large
         label
         @click.stop="vshieldDialog = true"
         >
-          <h1>{{vshielded.length}}</h1>
+          <h1>
+            <AnimatedNumber
+            :number="vshielded.length"
+            >
+            </AnimatedNumber>
+          </h1>
         </v-chip>
         <v-dialog
           v-model="vshieldDialog"
-          max-width="75%"
-          transition="fab-transition"
-          origin="top right"
+          max-width="95%"
+          overlay-opacity="0.9"
+          
         >
-          <DetailsCard
+          <DetailVshieldCard
             :risks="vshielded"
             :title="'vshielded'"
           >
-          </DetailsCard>
+          </DetailVshieldCard>
         </v-dialog>
       </div>
     </v-card>
@@ -244,7 +280,11 @@
 
 <script>
 import {mapActions} from 'vuex'
-import DetailsCard from '../components/DetailsCard.vue'
+import AnimatedNumber from '../components/AnimatedNumber.vue'
+import DetailUnAckCard from '../components/DetailUnAckCard.vue'
+import DetailVulnCard from '../components/DetailVulnCard.vue'
+import DetailAckCard from '../components/DetailAckCard.vue'
+import DetailVshieldCard from '../components/DetailVshieldCard.vue'
 import moment from 'moment'
 export default {
   data: () => ({
@@ -260,7 +300,11 @@ export default {
     
   ],
   components: {
-    DetailsCard
+    DetailUnAckCard,
+    DetailVulnCard,
+    AnimatedNumber,
+    DetailAckCard,
+    DetailVshieldCard
   },
   computed: {
     vuln () {
@@ -409,23 +453,23 @@ export default {
       let vshieldArray  = this.$store.getters.allRisks.filter(function(obj) {
         if (imgSel && repSel) {
           return (
-            (obj.v_patch_enforced_on)
+            (obj.v_patch_status === 'patched_audit' || obj.v_patch_status === 'patched_enforce')
             && (obj.registry === repSel)
             && (obj.image_name === imgSel)
           )
         } else if ( repSel && (!imgSel || imgSel === 'All Images')) {
           return (
-            (obj.v_patch_enforced_on)
+            (obj.v_patch_status === 'patched_audit' || obj.v_patch_status === 'patched_enforce')
             && (obj.registry === repSel)
           )
         } else if ( imgSel && !repSel && imgSel !== 'All Images') {
           return (
-            (obj.v_patch_enforced_on)
+            (obj.v_patch_status === 'patched_audit' || obj.v_patch_status === 'patched_enforce')
             && (obj.image_name === imgSel)
           )
         }
         else {
-          return (obj.v_patch_enforced_on)
+          return (obj.v_patch_status === 'patched_audit' || obj.v_patch_status === 'patched_enforce')
         }
         //return (obj.v_patch_status === "patch_available") //&& (obj.age < 30)
       })

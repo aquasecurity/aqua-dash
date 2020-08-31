@@ -2,7 +2,7 @@
   <div class="content">
     <v-card
     tile
-    elevation="5"
+    elevation="0"
     class="rounded-card"
     height="auto"
     >
@@ -12,14 +12,19 @@
         </span>
         <v-spacer/>
         <span class="title font-weight-thin ">
-        {{imageName}}
+        {{(repoName && (repoName !== 'All Registries'))? repoName : ''}}
+        </span>
+        <span class="title font-weight-thin ">
+        {{(imageName && repoName)? ':' : ''}}
+        </span>
+        <span class="title font-weight-thin ">
+        {{(imageName && (imageName !== 'All Images'))? imageName : ''}}
         </span>
       </v-card-title>
       <div class="container">
         <div class="Chart__content">
           <line-chart
             :timeseriesData="timeseriesData"
-            :height="250"
           ></line-chart>
         </div>
       </div>

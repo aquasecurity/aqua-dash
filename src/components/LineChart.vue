@@ -18,7 +18,8 @@ export default {
             },
             gridLines: {
               display: true
-            }
+            },
+            stacked: true
           }],
           xAxes: [ {
             gridLines: {
@@ -46,29 +47,32 @@ export default {
         datasets: [
           {
             label: 'critical',
-            borderColor: '#8b0000',
-            pointBackgroundColor: '#8b0000',
-            borderWidth: 1,
-            pointBorderColor: '#8b0000',
-            backgroundColor: 'transparent',
+            borderColor: '#800001',
+            pointBackgroundColor: '#800001',
+            borderWidth: 4,
+            pointRadius: 0,
+            pointBorderColor: '#800001',
+            backgroundColor: 'rgba(129,2,1,0.2)',
             data: this.chartData.critVuln
           },
           {
             label: 'high',
-            borderColor: '#d80000',
-            pointBackgroundColor: '#d80000',
-            borderWidth: 1,
-            pointBorderColor: '#d80000',
-            backgroundColor: 'transparent',
+            borderColor: '#BF0125',
+            pointBackgroundColor: '#BF0125',
+            borderWidth: 4,
+            pointRadius: 0,
+            pointBorderColor: '#BF0125',
+            backgroundColor: 'rgba(191,1,37,0.2)',
             data: this.chartData.highVuln
           },
           {
             label: 'medium',
-            borderColor: 'orange',
-            pointBackgroundColor: 'orange',
-            borderWidth: 1,
-            pointBorderColor: 'orange',
-            backgroundColor: 'transparent',
+            borderColor: '#DB7200',
+            pointRadius: 0,
+            pointBackgroundColor: '#DB7200',
+            borderWidth: 4,
+            pointBorderColor: '#DB7200',
+            backgroundColor: 'rgba(219,114,3,0.2)',
             data: this.chartData.medVuln
           }
         ]

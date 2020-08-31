@@ -1,62 +1,66 @@
 <template>
-  <div>
+  <div class="content">
   <v-card
     tile
-    elevation="5"
+    elevation="0"
     class="rounded-card"
     height="auto"
   >
-    <v-card-title class="justify-center">
-      <span class="title error--text font-weight-light">
-        FIX NEEDED
-      </span>
-    </v-card-title>
-    <div class="text-center">
-      <v-col>
-        <v-row>
-          <v-chip
-          class="ma-2"
-          color="#8b0000"
-          text-color="white"
-          x-large
-          label
-          >
-            <h1>{{vuln.vulnsFixNeededCritical}}</h1>
-          </v-chip>
-          <v-chip
-          class="ma-2"
-          color="info"
-          text-color="white"
-          x-large
-          label
-          >
-            <h1>{{vuln.daysRemainingCritical}}</h1>
-            <h5> Days</h5>
-          </v-chip>
-        </v-row>
-        <v-row>
-          <v-chip
-          class="ma-2"
-          color="#d80000"
-          text-color="white"
-          x-large
-          label
-          >
-            <h1>{{vuln.vulnsFixNeededHigh}}</h1>
-          </v-chip>
-          <v-chip
-          class="ma-2"
-          color="info"
-          text-color="white"
-          x-large
-          label
-          >
-            <h1>{{vuln.daysRemainingHigh}}</h1>
-            <h5> Days</h5>
-          </v-chip>
-        </v-row>
-    </v-col>
-    </div>
+    <v-list>
+      <v-alert
+        border="left"
+        colored-border
+        color="error darken-4"
+        dark
+        dense
+      >
+        <v-list-item-title>{{vuln.vulnsFixNeededCritical}} Critical</v-list-item-title>
+          <v-list-item-subtitle>
+            Fix {{vuln.daysRemainingCritical < 0 ? 'overdue' : 'due'}} {{moment().add(vuln.daysRemainingCritical, 'days').format('MMM DD')}} ({{moment().add(vuln.daysRemainingCritical, 'days').fromNow()}})
+          </v-list-item-subtitle>
+      </v-alert>
+    
+      <v-alert
+        border="left"
+        colored-border
+        color="error darken-2"
+        dark
+        dense
+      >
+        <v-list-item-title>{{vuln.vulnsFixNeededHigh}} High</v-list-item-title>
+        <v-list-item-subtitle>
+          Fix {{vuln.daysRemainingHigh < 0 ? 'overdue' : 'due'}} {{moment().add(vuln.daysRemainingHigh, 'days').format('MMM DD')}} ({{moment().add(vuln.daysRemainingHigh, 'days').fromNow()}})
+        </v-list-item-subtitle>
+        <v-list-item-subtitle>
+          
+        </v-list-item-subtitle>
+      </v-alert>
+    
+      <v-alert
+        border="left"
+        colored-border
+        color="success darken-1"
+        dark
+        dense
+      >
+        <v-list-item-title>{{acknowledged.length}} Acknowledged</v-list-item-title>
+        <v-list-item-subtitle>
+          {{acknowledgedDue < 0 ? 'Expired' : 'Expires'}} on {{moment().add(acknowledgedDue, 'days').format('MMM DD')}} ({{moment().add(acknowledgedDue, 'days').fromNow()}})
+        </v-list-item-subtitle>
+      </v-alert>
+      <v-alert
+        border="left"
+        colored-border
+        color="info darken-1"
+        dark
+        dense
+      >
+        <v-list-item-title>{{vshielded.length}} Vshield Applied</v-list-item-title>
+        <v-list-item-subtitle>
+          Fix {{vshieldedDue < 0 ? 'overdue' : 'due'}} {{moment().add(vshieldedDue, 'days').format('MMM DD')}} ({{moment().add(vshieldedDue, 'days').fromNow()}})
+        </v-list-item-subtitle>
+      </v-alert>
+   </v-list>
   </v-card>
   </div>
 </template>
@@ -67,7 +71,8 @@ import moment from 'moment'
 
   export default {
     data: () => ({
-      polling: null
+      polling: null,
+      moment: moment
     }),
     props: [
       'statsType',
@@ -109,7 +114,82 @@ import moment from 'moment'
           daysRemainingCritical: this.daysRemaining(dateSortedArray[0], 'critical'),
           daysRemainingHigh: this.daysRemaining(dateSortedArray[0], 'high')
         }
-      }
+      },
+      vshielded () {
+        //let that = this
+        let imgSel = this.$store.getters.imageSelected
+        let repSel = this.$store.getters.repoSelected
+        let vshieldArray  = this.$store.getters.allRisks.filter(function(obj) {
+          if (imgSel && repSel) {
+            return (
+              (obj.v_patch_status === 'patched_audit' || obj.v_patch_status === 'patched_enforce')
+              && (obj.registry === repSel)
+              && (obj.image_name === imgSel)
+            )
+          } else if ( repSel && (!imgSel || imgSel === 'All Images')) {
+            return (
+              (obj.v_patch_status === 'patched_audit' || obj.v_patch_status === 'patched_enforce')
+              && (obj.registry === repSel)
+            )
+          } else if ( imgSel && !repSel && imgSel !== 'All Images') {
+            return (
+              (obj.v_patch_status === 'patched_audit' || obj.v_patch_status === 'patched_enforce')
+              && (obj.image_name === imgSel)
+            )
+          }
+          else {
+            return (obj.v_patch_status === 'patched_audit' || obj.v_patch_status === 'patched_enforce')
+          }
+          //return (obj.v_patch_status === "patch_available") //&& (obj.age < 30)
+        })
+        return vshieldArray
+      },
+      vshieldedDue () {
+        console.log('$%# vshieldedDue: ')
+        return (this.vuln.daysRemainingCritical < this.vuln.daysRemainingHigh ? this.vuln.daysRemainingCritical : this.vuln.daysRemainingHigh)
+      },
+      acknowledged () {
+        //let that = this
+        let imgSel = this.$store.getters.imageSelected
+        let repSel = this.$store.getters.repoSelected
+        let acknowledgedArray  = this.$store.getters.allRisks.filter(function(obj) {
+          if (imgSel && repSel) {
+            return (
+              (moment(obj.acknowledged_date).isAfter('1970-01-01T00:00:00Z'))
+              && (obj.registry === repSel)
+              && (obj.image_name === imgSel)
+            )
+          } else if ( repSel && (!imgSel || imgSel === 'All Images')) {
+            return (
+              (moment(obj.acknowledged_date).isAfter('1970-01-01T00:00:00Z'))
+              && (obj.registry === repSel)
+            )
+          } else if ( imgSel && !repSel && imgSel !== 'All Images') {
+            return (
+              (moment(obj.acknowledged_date).isAfter('1970-01-01T00:00:00Z'))
+              && (obj.image_name === imgSel)
+            )
+          }
+          else {
+            return (
+              moment(obj.acknowledged_date).isAfter('1970-01-01T00:00:00Z')
+            )
+          }
+          //return (obj.v_patch_status === "patch_available") //&& (obj.age < 30)
+        })
+        return acknowledgedArray
+      },
+      acknowledgedDue () {
+        console.log('$%# acknowledgedDue: ')
+        console.log(this.acknowledged)
+        let expirationArray = []
+        for (let i = 0; i < this.acknowledged.length; i++) {
+          expirationArray.push(this.acknowledged[i].ack_expiration_days)
+          console.log(this.acknowledged[i].ack_expiration_days)
+        }
+        let expirationSortedArray = expirationArray.sort()
+        return expirationSortedArray[0]
+      },
     },
     created () {
       //this.pollData()

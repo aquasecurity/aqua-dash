@@ -49,7 +49,7 @@ export default new Vuex.Store({
     imageSelected: null,
     repoSelected: null,
     timeseriesData: null,
-    from: moment().subtract(15, 'days'),
+    from: moment().subtract(60, 'days'),
     to: moment(),
     risks: [],
     riskTableLoading: false,
