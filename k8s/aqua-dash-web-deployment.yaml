@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aqua-dash-web
+  namespace: aqua
+spec:
+  selector:
+    matchLabels:
+      run: aqua-dash-web
+  template:
+    metadata:
+      labels:
+        run: aqua-dash-web
+    spec:
+      containers:
+      - image: bitsanjay198/aqua-dash:latest
+        imagePullPolicy: IfNotPresent
+        name: aqua-dash-web
+        ports:
+        - containerPort: 80
+          protocol: TCP

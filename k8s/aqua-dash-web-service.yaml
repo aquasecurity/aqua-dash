@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: aqua-dash-web
+  namespace: aqua
+spec:
+  ports:
+  - port: 3000
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: aqua-dash-web
+  type: NodePort
