@@ -4,6 +4,7 @@ metadata:
   name: aqua-dash-web
   namespace: aqua
 spec:
+  replicas: 2
   selector:
     matchLabels:
       run: aqua-dash-web
