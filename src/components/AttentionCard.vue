@@ -16,7 +16,7 @@
       >
         <v-list-item-title>{{vuln.vulnsFixNeededCritical}} Critical</v-list-item-title>
           <v-list-item-subtitle>
-            Fix {{vuln.daysRemainingCritical < 0 ? 'overdue' : 'due'}} {{moment().add(vuln.daysRemainingCritical, 'days').format('MMM DD')}} ({{moment().add(vuln.daysRemainingCritical, 'days').fromNow()}})
+            Fix {{vuln.daysRemainingCritical &lt; 0 ? 'overdue' : 'due'}} {{moment().add(vuln.daysRemainingCritical, 'days').format('MMM DD')}} ({{moment().add(vuln.daysRemainingCritical, 'days').fromNow()}})
           </v-list-item-subtitle>
       </v-alert>
     
@@ -29,10 +29,7 @@
       >
         <v-list-item-title>{{vuln.vulnsFixNeededHigh}} High</v-list-item-title>
         <v-list-item-subtitle>
-          Fix {{vuln.daysRemainingHigh < 0 ? 'overdue' : 'due'}} {{moment().add(vuln.daysRemainingHigh, 'days').format('MMM DD')}} ({{moment().add(vuln.daysRemainingHigh, 'days').fromNow()}})
-        </v-list-item-subtitle>
-        <v-list-item-subtitle>
-          
+          Fix {{vuln.daysRemainingHigh &lt; 0 ? 'overdue' : 'due'}} {{moment().add(vuln.daysRemainingHigh, 'days').format('MMM DD')}} ({{moment().add(vuln.daysRemainingHigh, 'days').fromNow()}})
         </v-list-item-subtitle>
       </v-alert>
     
@@ -45,7 +42,7 @@
       >
         <v-list-item-title>{{acknowledged.length}} Acknowledged</v-list-item-title>
         <v-list-item-subtitle>
-          {{acknowledgedDue < 0 ? 'Expired' : 'Expires'}} on {{moment().add(acknowledgedDue, 'days').format('MMM DD')}} ({{moment().add(acknowledgedDue, 'days').fromNow()}})
+          {{acknowledgedDue &lt; 0 ? 'Expired' : 'Expires'}} on {{moment().add(acknowledgedDue, 'days').format('MMM DD')}} ({{moment().add(acknowledgedDue, 'days').fromNow()}})
         </v-list-item-subtitle>
       </v-alert>
       <v-alert
@@ -57,7 +54,7 @@
       >
         <v-list-item-title>{{vshielded.length}} Vshield Applied</v-list-item-title>
         <v-list-item-subtitle>
-          Fix {{vshieldedDue < 0 ? 'overdue' : 'due'}} {{moment().add(vshieldedDue, 'days').format('MMM DD')}} ({{moment().add(vshieldedDue, 'days').fromNow()}})
+          Fix {{vshieldedDue &lt; 0 ? 'overdue' : 'due'}} {{moment().add(vshieldedDue, 'days').format('MMM DD')}} ({{moment().add(vshieldedDue, 'days').fromNow()}})
         </v-list-item-subtitle>
       </v-alert>
    </v-list>
@@ -102,10 +99,10 @@ import moment from 'moment'
           sensitive_data += vulns[i].sensitive_data
           malware += vulns[i].malware
           dateHash[vulns[i].created] = ''
-          //console.log(`Scan: ${vulns[i].scan_date} Create: ${vulns[i].created} Image: ${vulns[i].name}`)
         }
+
         let dateSortedArray = Object.keys(dateHash).sort()
-        //console.log(dateSortedArray)
+
         return {
           vulnsFixNeededCritical: crit_vulns,
           vulnsFixNeededHigh: high_vulns,

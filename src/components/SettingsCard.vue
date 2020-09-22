@@ -95,7 +95,7 @@
       :loading="saveLoading"
       :disabled="saveLoading"
       v-on:click="save"
-		>Save Only</v-btn> 
+		>Save</v-btn> 
     <v-btn 
       rounded 
       outlined 
@@ -104,7 +104,7 @@
       :loading="saveAndGoLoading"
       :disabled="saveAndGoLoading"
       v-on:click="saveAndGo"
-    >Save and GO</v-btn>
+    >Login</v-btn>
     </v-layout>
   </v-form>
 </template>
@@ -129,8 +129,6 @@
       this.settings.criticalAge = this.$store.getters.criticalAge
       this.settings.highAge = this.$store.getters.highAge
       this.settings.rememberMe = this.$store.getters.rememberMe
-      console.log('SETTINGS PAGE: ')
-      console.log(this.settings.rememberMe)
 		},
 		methods: {
       ...mapActions([
@@ -143,8 +141,6 @@
         'fetchTimeseriesData'
       ]),
 			async save () {
-				console.log('from saveAquaApi: ')
-        //console.log(this.settings)
         this.saveLoading = true
         await this.saveSettings(this.settings)
         this.saveLoading = false
@@ -162,7 +158,6 @@
           this.fetchVulnAck()
           this.fetchTimeseriesData()
           console.log('saveAndGo... complete!')
-          //this.loading = false
         } catch (err) {
           console.log(err)
           this.error = true
