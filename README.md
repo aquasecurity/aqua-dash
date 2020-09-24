@@ -80,18 +80,14 @@ Numbers, Charts and Graphs.
 Project Structure
 =================
 
-![A screen shot of a smart phone Description automatically
-generated](media/image2.png){width="1.7667235345581802in"
-height="6.008064304461942in"}
+![screenshot](media/image2.png)
 
 Source code 
 ===========
 
 Source code of this project is under \`src\` directory.
 
-![A screenshot of a cell phone Description automatically
-generated](media/image3.png){width="1.7777777777777777in"
-height="4.263888888888889in"}
+![screenshot](media/image3.png)
 
 App.vue 
 -------
