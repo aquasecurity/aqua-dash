@@ -1,5 +1,5 @@
-#aqua.dash
-##dashboard built with Aqua API
+# aqua.dash
+## dashboard built with Aqua API
 
 ![A screenshot of the Dashboard](https://github.com/aquasecurity/aqua-dash/blob/master/media/image1.png)
 
