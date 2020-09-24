@@ -1,4 +1,4 @@
-# aqua.dash - dashboard built with Aqua API
+# aqua.dash - Dashboard built upon [Aqua API](https://docs.aquasec.com/reference#aqua-api-overview)
 
 ![A screenshot of the Dashboard](https://github.com/aquasecurity/aqua-dash/blob/master/media/image1.png)
 
