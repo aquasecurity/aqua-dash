@@ -46,6 +46,15 @@ Run / Production: compiles and minifies for production
 npm run build
 ```
 
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize Vuejs configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
 Run / Production: Kubernetes with kubectl
 ------------------------------------------------
 
@@ -113,9 +122,7 @@ This file is responsible for the browser state management and is an
 implementation of Vuex. All the state variable is defined here and is
 accessible by any component of the App.
 
-![A screen shot of a smart phone Description automatically
-generated](media/image4.png){width="2.5403226159230097in"
-height="3.5984886264216973in"}
+![A screen shot](media/image4.png)
 
 All the API Calls are also made from this file. Thus any API calls
 modification will have to be done in this file. Typically, the api call
@@ -123,9 +130,7 @@ function is prefixed with **fetch** keyword and is under action: section
 of the store. These **actions** can be called from any component. The
 app uses **axios** to make any http api calls.
 
-![A screenshot of a cell phone Description automatically
-generated](media/image5.png){width="2.620967847769029in"
-height="2.3857524059492565in"}
+![A screenshot](media/image5.png)
 
 Source code is further subdivided into views, components and plugin.
 
@@ -136,9 +141,7 @@ Views
 
 The main view Dashboard.vue is in views directory.
 
-![A close up of a sign Description automatically
-generated](media/image6.png){width="1.7638888888888888in"
-height="1.1805555555555556in"}
+![screenshot](media/image6.png)
 
 If desired, you can change the main layout of GUI here. Dashboard.vue
 use component architecture to display GUI. The image, repo and project
@@ -149,8 +152,7 @@ Attention with timelines are on the right by AttentionCard.vue.
 TopToolbar is rendered at App.vue level, can be modified to display your
 logo etc. by modifying TopToolbar.vue.
 
-![A screenshot of a video game Description automatically
-generated](media/image7.tiff){width="6.5in" height="4.0625in"}
+![A screenshot](media/image7.tiff)
 
 Plugins
 -------
@@ -161,16 +163,12 @@ This app uses only one plugin i.e. Vuetify plugin. Any Theming related
 or Vuetify related changes can be done in vuetify.js under plugin
 directory.
 
-![A close up of a sign Description automatically
-generated](media/image8.png){width="1.5416666666666667in"
-height="0.8194444444444444in"}
+![screenshot](media/image8.png)
 
 Components
 ----------
 
-![A picture containing sitting, holding, clock Description automatically
-generated](media/image9.png){width="1.1290321522309712in"
-height="2.9922812773403327in"}
+![screenshot](media/image9.png)
 
 ### AnimatedNumber.vue
 
@@ -182,9 +180,7 @@ animation.
 This component is responsible for rendering the Attention card on the
 right. Any display logic can be changed in this file.
 
-![A screenshot of a cell phone Description automatically
-generated](media/image10.png){width="1.2661286089238846in"
-height="1.8609142607174103in"}
+![screenshot](media/image10.png)
 
 ### BottomNav.vue(not displayed on the dashboard)
 
@@ -197,13 +193,9 @@ This component is rendered as a Dialog when a user clicks on the
 Acknowledged button. Acknowledged Dialog display logic can be changed
 here.
 
-![A close up of a sign Description automatically
-generated](media/image11.png){width="0.9435487751531059in"
-height="0.8401465441819772in"}
+![screenshot](media/image11.png)
 
-![A screenshot of a video screen Description automatically
-generated](media/image12.png){width="6.5in"
-height="2.088888888888889in"}
+![screenshot](media/image12.png)
 
 ### DetailUnAckCard.vue
 
@@ -211,25 +203,18 @@ This component is rendered as a Dialog when a user clicks on the
 Unacknowledged button. Unacknowledged Dialog display logic can be
 changed here.
 
-![A picture containing food, drawing Description automatically
-generated](media/image13.png){width="1.024194006999125in"
-height="0.7727449693788276in"}
+![screenshot](media/image13.png)
 
-![A screenshot of a cell phone Description automatically
-generated](media/image14.png){width="6.5in" height="3.86875in"}
+![screenshot](media/image14.png)
 
 ### DetailVshieldCard.vue
 
 This component is rendered as a Dialog when a user clicks on the
 Vshieded button. Vshieded Dialog display logic can be changed here.
 
-![A sign on the screen Description automatically
-generated](media/image15.png){width="0.6451607611548557in"
-height="0.8268077427821522in"}
+![screenshot](media/image15.png)
 
-![A screenshot of a video game Description automatically
-generated](media/image16.png){width="6.5in"
-height="2.970138888888889in"}
+![screenshot](media/image16.png)
 
 ### DetailVulnCard.vue
 
@@ -237,13 +222,9 @@ This component is rendered as a Dialog when a user clicks on the
 Vulnerabilities button. Vulnerabilities Dialog display logic can be
 changed here.
 
-![A close up of a sign Description automatically
-generated](media/image17.png){width="1.524194006999125in"
-height="0.6745592738407699in"}
+![screenshot](media/image17.png)
 
-![A screenshot of a social media post Description automatically
-generated](media/image18.png){width="6.5in"
-height="3.692361111111111in"}
+![screenshot](media/image18.png)
 
 ### LineChart.vue
 
@@ -253,9 +234,7 @@ logic can be changed here. For example you only want to display critical
 and high vulnerabilities, you can remove the medium data point here. You
 can also display the unstacked version of the chart.
 
-![A screenshot of a computer Description automatically
-generated](media/image19.png){width="6.5in"
-height="3.6798611111111112in"}
+![screenshot](media/image19.png)
 
 ### SelectCard.vue
 
@@ -265,9 +244,7 @@ left. Any display logic can be changed here.
 **NOTE: Selecting the Project/Namespace is not implemented yet and does
 nothing when selected.**
 
-![A screenshot of a cell phone Description automatically
-generated](media/image20.png){width="1.177419072615923in"
-height="2.0811679790026245in"}
+![screenshot](media/image20.png)
 
 ### SettingsCard.vue
 
@@ -279,13 +256,9 @@ vulnerabilities.
 
 Note: Settings data is stored in the browser local storage.
 
-![A picture containing drawing Description automatically
-generated](media/image21.png){width="1.43125in"
-height="0.41606080489938757in"}
+![screenshot](media/image21.png)
 
-![A screenshot of a cell phone Description automatically
-generated](media/image22.png){width="1.431943350831146in"
-height="3.1612904636920387in"}
+![screenshot](media/image22.png)
 
 ### TimeseriesCard.vue
 
@@ -297,8 +270,7 @@ cosmetics to the LineChart like Card title, image and repo name etc.
 This component is responsible for displaying the top navigation logo and
 tools. It contains the display logic (show/hide) for SettingsCard.vue
 
-![](media/image23.png){width="3.7177416885389327in"
-height="0.3456408573928259in"}
+![screenshot](media/image23.png)
 
 ### VulnCard.vue
 
@@ -307,37 +279,5 @@ contains the display logic and also correlation logic of Image
 Vulnerabilities and Risk data. This could be the file you might find
 yourself changing the most.
 
-![A close up of a logo Description automatically
-generated](media/image24.png){width="6.5in"
-height="0.8833333333333333in"}
+![screenshot](media/image24.png)
 
-
-# aqua-dash
-
-## Project setup
-```
-git clone https://github.com/sanjay-shah/aqua-dash.git
-cd aqua-dash
-npm install
-```
-### Dependecies
-A separate implementation of Timeseries API is required to populate the graps and charts.
-Here's sample reference implementaion of [Aqua Timeseries API](https://github.com/sanjay-shah/aqua-timeseries-api).
-
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize Vuejs configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
