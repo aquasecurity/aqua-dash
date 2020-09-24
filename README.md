@@ -1,4 +1,4 @@
-![A screenshot of a Dashboard](https://github.com/aquasecurity/aqua-dash/blob/master/media/image1.png){width="6.5in" height="4.0625in"}
+![A screenshot of the Dashboard](https://github.com/aquasecurity/aqua-dash/blob/master/media/image1.png)
 
 Install and run
 ===============
@@ -8,18 +8,14 @@ Github Repo: <https://github.com/sanjay-shah/aqua-dash.git>
 Prereqisite
 -----------
 
-NodeJS, and npm is required to run this app.
+[NodeJS](https://nodejs.org/en/download/), and npm is required to run this app.
 
-<https://nodejs.org/en/download/>
 
 ### Ubuntu setup for nodejs and npm
 
 ```bash
-
 sudo apt update
-
 sudo apt install nodejs
-
 sudo apt install npm
 
 ```
@@ -28,11 +24,8 @@ Project setup
 -------------
 
 ```bash
-
 git clone https://github.com/sanjay-shah/aqua-dash.git
-
 cd aqua-dash
-
 npm install
 
 ```
@@ -41,18 +34,14 @@ Development: compiles and hot-reloads for development
 -----------------------------------------------------
 
 ```bash
-
 npm run serve
-
 ```
 
 Production: compiles and minifies for production
 ------------------------------------------------
 
 ```bash
-
 npm run build
-
 ```
 
 Introduction
