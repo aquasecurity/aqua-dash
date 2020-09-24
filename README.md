@@ -14,7 +14,7 @@ NodeJS, and npm is required to run this app.
 
 ### Ubuntu setup for nodejs and npm
 
-\`\`\`bash
+```bash
 
 sudo apt update
 
@@ -22,12 +22,12 @@ sudo apt install nodejs
 
 sudo apt install npm
 
-\`\`\`
+```
 
 Project setup
 -------------
 
-\`\`\`bash
+```bash
 
 git clone https://github.com/sanjay-shah/aqua-dash.git
 
@@ -35,25 +35,25 @@ cd aqua-dash
 
 npm install
 
-\`\`\`
+```
 
 Development: compiles and hot-reloads for development
 -----------------------------------------------------
 
-\`\`\`bash
+```bash
 
 npm run serve
 
-\`\`\`
+```
 
 Production: compiles and minifies for production
 ------------------------------------------------
 
-\`\`\`bash
+```bash
 
 npm run build
 
-\`\`\`
+```
 
 Introduction
 ============
