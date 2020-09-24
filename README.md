@@ -22,7 +22,7 @@ sudo apt install npm
 
 ```
 
-Project setup
+Install / Project setup
 -------------
 
 ```bash
@@ -32,18 +32,25 @@ npm install
 
 ```
 
-Development: compiles and hot-reloads for development
+Run / Development: compiles and hot-reloads for development
 -----------------------------------------------------
 
 ```bash
 npm run serve
 ```
 
-Production: compiles and minifies for production
+Run / Production: compiles and minifies for production
 ------------------------------------------------
 
 ```bash
 npm run build
+```
+
+Run / Production: Kubernetes with kubectl
+------------------------------------------------
+
+```bash
+kubectl apply -f ./k8s
 ```
 
 Introduction
