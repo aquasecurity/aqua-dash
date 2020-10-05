@@ -11,6 +11,7 @@ Prereqisite
 -----------
 
 [NodeJS](https://nodejs.org/en/download/), and npm is required to run this app.
+Sample [Timeseries API](https://github.com/sanjay-shah/aqua-timeseries-api) implementation is required for the charts to work properly.
 
 
 ### Ubuntu setup for nodejs and npm
@@ -26,7 +27,7 @@ Install / Project setup
 -------------
 
 ```bash
-git clone https://github.com/sanjay-shah/aqua-dash.git
+git clone https://github.com/aquasecurity/aqua-dash.git
 cd aqua-dash
 npm install
 
