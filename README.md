@@ -5,7 +5,7 @@
 Install and run
 ===============
 
-Github Repo: <https://github.com/sanjay-shah/aqua-dash.git>
+Github Repo: <https://github.com/aquasecurity/aqua-dash.git>
 
 Prereqisite
 -----------
