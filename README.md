@@ -39,7 +39,7 @@ Run / Development: compiles and hot-reloads for development
 npm run serve
 ```
 
-Run / Production: compiles and minifies for production
+Build / Production: compiles and minifies for production
 ------------------------------------------------
 
 ```bash
