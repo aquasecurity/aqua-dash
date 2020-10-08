@@ -56,7 +56,7 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
-Run / Production: Kubernetes with kubectl
+Deploy / Production: Kubernetes with kubectl
 ------------------------------------------------
 Edit [Ingress](https://github.com/aquasecurity/aqua-dash/blob/master/k8s/aqua-dash-web-ingress.yaml#L10) and replace example.com with your domain name.
 
