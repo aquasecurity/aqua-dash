@@ -7,6 +7,42 @@ Install and run
 
 Github Repo: <https://github.com/aquasecurity/aqua-dash.git>
 
+# Table of Contents
+
+ * [Prereqisite](#prereqisite)
+    * [Ubuntu setup for nodejs and npm](#ubuntu-setup-for-nodejs-and-npm)
+ * [Install / Project setup](#install--project-setup)
+ * [Run / Development: compiles and hot-reloads for development](#run--development-compiles-and-hot-reloads-for-development)
+ * [Build / Production: compiles and minifies for production](#build--production-compiles-and-minifies-for-production)
+    * [Lints and fixes files](#lints-and-fixes-files)
+    * [Customize Vuejs configuration](#customize-vuejs-configuration)
+ * [Deploy / Production: Kubernetes with kubectl](#deploy--production-kubernetes-with-kubectl)
+ * [Introduction](#introduction)
+ * [Project Structure](#project-structure)
+ * [Source code](#source-code)
+ * [App.vue ](#appvue)
+ * [main.js](#mainjs)
+ * [router.js](#routerjs) 
+ * [store.js (most important code)](#storejs-most-important-code)
+ * [Views](#views)
+    * [Dashboard.vue](#dashboardvue)
+ * [Plugins](#plugins)
+    * [vuetify.js](#vuetifyjs)
+ * [Components](#components)
+    * [AnimatedNumber.vue](#animatednumbervue)
+    * [AttentionCard.vue](#attentioncardvue)
+    * [BottomNav.vue(not displayed on the dashboard)](#bottomnavvuenot-displayed-on-the-dashboard) 
+    * [DetailAckCard.vue](#detailackcardvue)
+    * [DetailUnAckCard.vue](#detailunackcardvue)
+    * [DetailVshieldCard.vue](#detailvshieldcardvue)
+    * [DetailVulnCard.vue](#detailvulncardvue)
+    * [LineChart.vue](#linechartvue)
+    * [SelectCard.vue](#selectcardvue)
+    * [SettingsCard.vue](#settingscardvue)
+    * [TimeseriesCard.vue](#timeseriescardvue)
+    * [TopToolbar.vue](#toptoolbarvue)
+    * [VulnCard.vue](#vulncardvue)
+
 Prereqisite
 -----------
 
