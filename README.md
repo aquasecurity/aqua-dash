@@ -5,12 +5,49 @@
 Install and run
 ===============
 
-Github Repo: <https://github.com/sanjay-shah/aqua-dash.git>
+Github Repo: <https://github.com/aquasecurity/aqua-dash.git>
+
+# Table of Contents
+
+ * [Prereqisite](#prereqisite)
+    * [Ubuntu setup for nodejs and npm](#ubuntu-setup-for-nodejs-and-npm)
+ * [Install / Project setup](#install--project-setup)
+ * [Run / Development: compiles and hot-reloads for development](#run--development-compiles-and-hot-reloads-for-development)
+ * [Build / Production: compiles and minifies for production](#build--production-compiles-and-minifies-for-production)
+    * [Lints and fixes files](#lints-and-fixes-files)
+    * [Customize Vuejs configuration](#customize-vuejs-configuration)
+ * [Deploy / Production: Kubernetes with kubectl](#deploy--production-kubernetes-with-kubectl)
+ * [Introduction](#introduction)
+ * [Project Structure](#project-structure)
+ * [Source code](#source-code)
+ * [App.vue ](#appvue)
+ * [main.js](#mainjs)
+ * [router.js](#routerjs) 
+ * [store.js (most important code)](#storejs-most-important-code)
+ * [Views](#views)
+    * [Dashboard.vue](#dashboardvue)
+ * [Plugins](#plugins)
+    * [vuetify.js](#vuetifyjs)
+ * [Components](#components)
+    * [AnimatedNumber.vue](#animatednumbervue)
+    * [AttentionCard.vue](#attentioncardvue)
+    * [BottomNav.vue(not displayed on the dashboard)](#bottomnavvuenot-displayed-on-the-dashboard) 
+    * [DetailAckCard.vue](#detailackcardvue)
+    * [DetailUnAckCard.vue](#detailunackcardvue)
+    * [DetailVshieldCard.vue](#detailvshieldcardvue)
+    * [DetailVulnCard.vue](#detailvulncardvue)
+    * [LineChart.vue](#linechartvue)
+    * [SelectCard.vue](#selectcardvue)
+    * [SettingsCard.vue](#settingscardvue)
+    * [TimeseriesCard.vue](#timeseriescardvue)
+    * [TopToolbar.vue](#toptoolbarvue)
+    * [VulnCard.vue](#vulncardvue)
 
 Prereqisite
 -----------
 
 [NodeJS](https://nodejs.org/en/download/), and npm is required to run this app.
+Sample [Timeseries API](https://github.com/sanjay-shah/aqua-timeseries-api) implementation is required for the charts to work properly.
 
 
 ### Ubuntu setup for nodejs and npm
@@ -26,7 +63,7 @@ Install / Project setup
 -------------
 
 ```bash
-git clone https://github.com/sanjay-shah/aqua-dash.git
+git clone https://github.com/aquasecurity/aqua-dash.git
 cd aqua-dash
 npm install
 
@@ -39,7 +76,7 @@ Run / Development: compiles and hot-reloads for development
 npm run serve
 ```
 
-Run / Production: compiles and minifies for production
+Build / Production: compiles and minifies for production
 ------------------------------------------------
 
 ```bash
@@ -55,8 +92,9 @@ npm run lint
 See [Configuration Reference](https://cli.vuejs.org/config/).
 
 
-Run / Production: Kubernetes with kubectl
+Deploy / Production: Kubernetes with kubectl
 ------------------------------------------------
+Edit [Ingress](https://github.com/aquasecurity/aqua-dash/blob/master/k8s/aqua-dash-web-ingress.yaml#L10) and replace example.com with your domain name.
 
 ```bash
 kubectl apply -f ./k8s
