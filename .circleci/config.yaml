@@ -1,0 +1,27 @@
+jobs:
+  build:
+    docker:
+      - image: docker:stable-git
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          name: Build image
+          command: docker build -t aqua-dash:${CIRCLE_SHA1} .
+      - run:
+          name: Login to Aqua registry and pull scanner
+          command: docker login registry.aquasec.com -u ${AQUA_USER} -p ${AQUA_PASSWORD} && docker pull registry.aquasec.com/scanner:5.3
+      - run:
+          name: Scan image with Aqua scanner
+          command: docker run -e BUILD_JOB_NAME=${CIRCLE_BUILD_URL} -e BUILD_NUMBER=${CIRCLE_BUILD_NUM} --rm -v /var/run/docker.sock:/var/run/docker.sock registry.aquasec.com/scanner:5.3 scan --host=${AQUA_CONSOLE} --user=${AQUA_SCANNER_USER} --password=${AQUA_SCANNER_PASSWORD} --no-verify --verbose-errors --local aqua-dash:${CIRCLE_SHA1}
+      - run:
+          name: Push image to DockerHub 
+          command: |
+            echo "PUT PUSH HERE - docker push [OPTIONS] NAME[:TAG]"
+workflows:
+  version: 2
+  release:
+    jobs:
+      - build:
+          context:
+            - aqua
